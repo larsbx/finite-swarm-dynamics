@@ -21,6 +21,8 @@ jobs:
           path: .cache/finite-math-kernels
           persist-credentials: false
       - uses: prefix-dev/setup-pixi@v0.9.1
+        with:
+          manifest-path: .cache/finite-math-kernels/pixi.toml
       - name: Check canonical upstream revision
         run: |
           python - <<'PY'
