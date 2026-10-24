@@ -57,3 +57,9 @@ jobs:
           pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
             mojo run -I .cache/finite-math-kernels/kernel -I kernel \
             tests/mojo/test_finite_phase.mojo
+      - name: Exact compiled phase and modal differential conformance over F_7
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel -I kernel \
+            tests/mojo/phase_conformance.mojo > "$RUNNER_TEMP/phase_F7.txt"
+          python -m tools.check_phase_conformance "$RUNNER_TEMP/phase_F7.txt"
