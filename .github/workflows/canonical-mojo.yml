@@ -52,3 +52,8 @@ jobs:
             mojo run -I .cache/finite-math-kernels/kernel -I kernel \
             tests/mojo/alignment_conformance.mojo > "$RUNNER_TEMP/alignment_F7.txt"
           python -m tools.check_alignment_conformance "$RUNNER_TEMP/alignment_F7.txt"
+      - name: Verify compiled finite Vicsek and Kuramoto analogues
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel -I kernel \
+            tests/mojo/test_finite_phase.mojo
