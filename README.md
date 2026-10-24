@@ -53,3 +53,15 @@ Reusable production field, polynomial and rotor kernels belong in
 not in copies maintained independently in this repository. Python remains
 an independent research/differential oracle until a pinned Mojo integration
 and conformance checks are delivered.
+
+## Finite linear alignment and functional-graph census
+
+The exact Python oracle `reference/linear_alignment.py` now specifies an
+algebraically row-stochastic velocity update and exhaustive finite-state orbit
+census (for an explicitly enumerated domain within a declared cap). Its
+`consensus_index()` determines whether **every** velocity configuration
+reaches common velocity after at most N−1 steps, using the induced nilpotent
+operator on the consensus quotient. This is an exact finite theorem, not a
+contraction argument or an assertion of classical Cucker–Smale equivalence.
+
+See [the alignment theorem and scope](docs/LINEAR_ALIGNMENT.md).
