@@ -65,3 +65,12 @@ operator on the consensus quotient. This is an exact finite theorem, not a
 contraction argument or an assertion of classical Cucker–Smale equivalence.
 
 See [the alignment theorem and scope](docs/LINEAR_ALIGNMENT.md).
+
+## Finite Vicsek/Kuramoto structural analogues
+
+`reference/finite_phase_models.py` now provides an oriented modal-Vicsek update
+with exact neighbor heading-count selection, plus a finite algebraic phase
+oscillator model with determinant coupling and finite rotation-group drift.
+Read [the model contracts](docs/FINITE_PHASE_MODELS.md) before interpreting
+these as classical dynamical systems: their update and phase-transition
+semantics differ. Test with `python -m unittest discover -s . -v`.
