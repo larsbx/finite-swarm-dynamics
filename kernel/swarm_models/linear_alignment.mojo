@@ -10,11 +10,11 @@ from chromogeometry.chromatic import ChromoVec2
 
 struct AlignmentStep[K: ExactField](Movable):
     var ok: Bool
-    var velocities: List[ChromoVec2[K]]
+    var velocities: List[ChromoVec2[Self.K]]
 
     def __init__(out self):
         self.ok = True
-        self.velocities = List[ChromoVec2[K]]()
+        self.velocities = List[ChromoVec2[Self.K]]()
 
 
 def alignment_step[K: ExactField](
@@ -62,13 +62,13 @@ def alignment_step[K: ExactField](
 
 struct FlockStep[K: ExactField](Movable):
     var ok: Bool
-    var positions: List[ChromoVec2[K]]
-    var velocities: List[ChromoVec2[K]]
+    var positions: List[ChromoVec2[Self.K]]
+    var velocities: List[ChromoVec2[Self.K]]
 
     def __init__(out self):
         self.ok = True
-        self.positions = List[ChromoVec2[K]]()
-        self.velocities = List[ChromoVec2[K]]()
+        self.positions = List[ChromoVec2[Self.K]]()
+        self.velocities = List[ChromoVec2[Self.K]]()
 
 
 def flock_step[K: ExactField](
