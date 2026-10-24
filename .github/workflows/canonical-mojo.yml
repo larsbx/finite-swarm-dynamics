@@ -41,3 +41,8 @@ jobs:
           pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
             mojo run -I .cache/finite-math-kernels/kernel \
             tests/mojo/chromogeometry_consumer.mojo
+      - name: Verify compiled Mojo finite alignment
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel -I kernel \
+            tests/mojo/test_linear_alignment.mojo
