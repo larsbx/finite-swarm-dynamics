@@ -148,4 +148,50 @@ theorem phaseStep7_fixed_iff_det_zero :
       (phaseStep7 (u,v) = (u,v)) ↔ determinant7 u v = 0 := by
   decide
 
+
+/-! ## Finite phase update over all seven F7 coupling parameters -/
+def phaseStep7At (k : F7) (s : Phase7State) : Phase7State :=
+  let t := k * determinant7 s.1 s.2
+  (rotateByCayley7 s.1 t, rotateByCayley7 s.2 (-t))
+
+def flipSecond7 (s : Phase7State) : Phase7State :=
+  (s.1, (-s.2.1, -s.2.2))
+
+/-- k=1 reproduces the original nonlinear phase map. -/
+theorem phaseStep7At_one :
+    ∀ i j : Fin 8,
+      phaseStep7At 1 (unitHeading7 i, unitHeading7 j) =
+        phaseStep7 (unitHeading7 i, unitHeading7 j) := by
+  decide
+
+/-- All seven couplings preserve both blue-unit headings. -/
+theorem phaseStep7At_preserves_units :
+    ∀ k : F7, ∀ i j : Fin 8,
+      let out := phaseStep7At k (unitHeading7 i, unitHeading7 j)
+      norm7 out.1 = 1 ∧ norm7 out.2 = 1 := by
+  decide
+
+/-- All seven F7 couplings satisfy the complete-domain identity F³=F. -/
+theorem phaseStep7At_three_eq_one :
+    ∀ k : F7, ∀ i j : Fin 8,
+      let state := (unitHeading7 i, unitHeading7 j)
+      phaseStep7At k (phaseStep7At k (phaseStep7At k state)) =
+        phaseStep7At k state := by
+  decide
+
+/-- Reversing the second heading intertwines coupling k with coupling -k. -/
+theorem phaseStep7At_sign_conjugacy :
+    ∀ k : F7, ∀ i j : Fin 8,
+      let state := (unitHeading7 i, unitHeading7 j)
+      flipSecond7 (phaseStep7At k state) =
+        phaseStep7At (-k) (flipSecond7 state) := by
+  decide
+
+/-- The reversal is involutive. -/
+theorem flipSecond7_involution :
+    ∀ i j : Fin 8,
+      let state := (unitHeading7 i, unitHeading7 j)
+      flipSecond7 (flipSecond7 state) = state := by
+  decide
+
 end Chromoswarm
