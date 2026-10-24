@@ -74,3 +74,7 @@ oscillator model with determinant coupling and finite rotation-group drift.
 Read [the model contracts](docs/FINITE_PHASE_MODELS.md) before interpreting
 these as classical dynamical systems: their update and phase-transition
 semantics differ. Test with `python -m unittest discover -s . -v`.
+
+## Compiled Mojo finite alignment
+
+The field-generic linear alignment step is implemented in `kernel/swarm_models/linear_alignment.mojo`, backed by the pinned upstream `ExactField` and `ChromoVec2`. CI compiles and exercises its directed-chain consensus and rejection cases in F_7 and F_13. The Python reference remains independent; see [Mojo alignment contract](docs/MOJO_ALIGNMENT.md).
