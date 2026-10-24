@@ -91,7 +91,7 @@ def flock_step[K: ExactField](
         out.ok = False
         return out^
     for i in range(len(positions)):
-        var u = motion.velocities[i]
+        var u = motion.velocities[i].copy()
         var new_x = K.add(positions[i].x, K.mul(speed, u.x))
         var new_y = K.add(positions[i].y, K.mul(speed, u.y))
         if not K.accepted(new_x) or not K.accepted(new_y):
