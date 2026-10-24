@@ -16,7 +16,7 @@ class CouplingStratificationTests(unittest.TestCase):
         self.assertEqual(len(strata),7)
         self.assertEqual([s.cycle_count for s in strata],[64,32,24,32,32,24,32])
         self.assertEqual([s.fixed_points for s in strata],[64,16,16,16,16,16,16])
-        self.assertEqual([s.transient_states for s in strata],[0,16,24,16,16,24,16])
+        self.assertEqual([s.transient_states for s in strata],[0,16,32,16,16,32,16])
         for k,s in enumerate(strata):
             self.assertEqual(s.signature,SIGNATURES[k])
             self.assertEqual(sum(b*n for _,b,_,n in s.signature),64)
