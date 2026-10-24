@@ -69,3 +69,8 @@ jobs:
           pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
             mojo run -I .cache/finite-math-kernels/kernel -I kernel \
             tests/mojo/test_chromatic_neighborhoods.mojo
+      - name: Verify exact batched Mojo parity and atomic refusal
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel -I kernel \
+            tests/mojo/test_batched_alignment.mojo
