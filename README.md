@@ -35,3 +35,21 @@ See [SPEC.md](SPEC.md) for definitions, guards and the distinction between prove
 1. Typed general characteristic-not-2 / extension-field geometry and reusable finite kernels.
 2. Lean formalization of chromatic identities, null guards, rotations and transition invariants.
 3. Independent finite Cucker–Smale, Vicsek and Kuramoto analogues with explicit correspondence/non-equivalence obligations.
+
+## Extension-field reference (phase 0.2)
+
+The exact non-authoritative Python oracle `reference/extension_chromogeometry.py`
+implements algebraic blue/red/green geometry and finite swarm transitions over
+validated quotient fields F_p[X]/(f), including genuinely non-prime fields.
+It rejects reducible moduli and cross-field operands and explicitly guards
+undefined spread values. New tests check F_9, F_25 and F_27 arithmetic and
+compare all F_7 geometry against the original prime-field kernel.
+
+Run `python -m unittest discover -s . -v`.
+
+**Canonical source boundary:** See [shared-kernel consumer contract](docs/CONSUMER_BOUNDARY.md).
+Reusable production field, polynomial and rotor kernels belong in
+[larsbx/finite-math-kernels](https://github.com/larsbx/finite-math-kernels),
+not in copies maintained independently in this repository. Python remains
+an independent research/differential oracle until a pinned Mojo integration
+and conformance checks are delivered.
