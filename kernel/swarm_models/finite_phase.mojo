@@ -87,7 +87,7 @@ def finite_kuramoto_step[K: ExactField](
             out.ok = False
             out.headings.clear()
             return out^
-        out.headings.append(result)
+        out.headings.append(result.copy())
     return out^
 
 
@@ -158,5 +158,5 @@ def modal_vicsek_step[K: ExactField](
             out.headings.clear()
             return out^
         out.positions.append(ChromoVec2[K](x, y))
-        out.headings.append(rotated)
+        out.headings.append(rotated.copy())
     return out^
