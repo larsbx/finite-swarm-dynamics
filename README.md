@@ -78,3 +78,7 @@ semantics differ. Test with `python -m unittest discover -s . -v`.
 ## Compiled Mojo finite alignment
 
 The field-generic linear alignment step is implemented in `kernel/swarm_models/linear_alignment.mojo`, backed by the pinned upstream `ExactField` and `ChromoVec2`. CI compiles and exercises its directed-chain consensus and rejection cases in F_7 and F_13. The Python reference remains independent; see [Mojo alignment contract](docs/MOJO_ALIGNMENT.md).
+
+## Exhaustive Mojo ↔ Python conformance
+
+The 343 scalar configurations in `F_7³` for the directed alignment chain are replayed through actual pinned Mojo code and independently through the Python oracle. CI compares every canonical row against a versioned finite-field dataset; see [conformance protocol](docs/ALIGNMENT_CONFORMANCE.md).
