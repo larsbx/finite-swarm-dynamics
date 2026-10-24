@@ -1,0 +1,43 @@
+name: Pinned Mojo chromogeometry consumer
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  canonical-mojo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: larsbx/finite-math-kernels
+          ref: 8fc4c7b3e0f7bb643a38124c99af9c397a868650
+          path: .cache/finite-math-kernels
+          persist-credentials: false
+      - uses: prefix-dev/setup-pixi@v0.9.1
+        with:
+          manifest-path: .cache/finite-math-kernels/pixi.toml
+      - name: Check canonical upstream revision
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, tomllib
+          spec = tomllib.loads(pathlib.Path("UPSTREAM.toml").read_text())["finite_math_kernels"]
+          assert spec["repository"] == "larsbx/finite-math-kernels"
+          found = subprocess.check_output(
+              ["git", "-C", ".cache/finite-math-kernels", "rev-parse", "HEAD"],
+              text=True
+          ).strip()
+          assert found == spec["commit"], (found, spec["commit"])
+          print("verified upstream pin", found)
+          PY
+      - name: Exercise canonical Mojo chromogeometry
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel \
+            tests/mojo/chromogeometry_consumer.mojo

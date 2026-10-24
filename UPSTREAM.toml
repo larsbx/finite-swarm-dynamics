@@ -1,0 +1,5 @@
+[finite_math_kernels]
+repository = "larsbx/finite-math-kernels"
+commit = "8fc4c7b3e0f7bb643a38124c99af9c397a868650"
+include_root = "kernel"
+modules = ["finite_exact", "chromogeometry", "projective_limits"]
