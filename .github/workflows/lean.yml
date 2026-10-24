@@ -1,0 +1,29 @@
+name: Lean finite certificates
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lean:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refuse proof holes and locally declared axioms
+        run: |
+          if grep -R -nE '\\b(sorry|admit|axiom|native_decide)\\b' formal/lean/Chromoswarm.lean; then
+            echo "Unreviewed proof escape or local axiom found"; exit 1
+          fi
+      - uses: leanprover/lean-action@v1
+        with:
+          lake-package-directory: formal/lean
+          build: true
+          use-mathlib-cache: false
+          leanchecker: true
+          leanchecker-args: Chromoswarm

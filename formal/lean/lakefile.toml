@@ -1,0 +1,6 @@
+name = "chromoswarm_formal"
+version = "0.1.0"
+defaultTargets = ["Chromoswarm"]
+
+[[lean_lib]]
+name = "Chromoswarm"
