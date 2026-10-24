@@ -14,7 +14,7 @@ def weights[p: Int64]() -> List[List[Fp[p]]]:
     for i in range(3):
         var row = List[Fp[p]]()
         for j in range(3):
-            row.append(Fp[p](1 if i != j else 0))
+            row.append(Fp[p](Int64(1 if i != j else 0)))
         out.append(row^)
     return out^
 
@@ -97,7 +97,7 @@ def test_phase[p: Int64]() raises:
     for i in range(2):
         var row = List[Fp[p]]()
         for j in range(2):
-            row.append(Fp[p](0 if i == j else 1))
+            row.append(Fp[p](Int64(0 if i == j else 1)))
         w2.append(row^)
     var unitdrift = List[ChromoVec2[FpField[p]]]()
     unitdrift.append(v[p](1,0))
