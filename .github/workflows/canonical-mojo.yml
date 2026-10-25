@@ -80,3 +80,8 @@ jobs:
             mojo run -I .cache/finite-math-kernels/kernel -I kernel \
             tests/mojo/coupling_strata.mojo > "$RUNNER_TEMP/coupling_F7.txt"
           python -m tools.coupling_stratification "$RUNNER_TEMP/coupling_F7.txt"
+      - name: Exact rational geometry and ordered consensus through canonical QField
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel -I kernel \
+            tests/mojo/test_rational_foundation.mojo
