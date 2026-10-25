@@ -5,7 +5,7 @@ Positivity and column-unitality are separate mathematical capabilities.
 """
 from finite_exact.field import QField
 from finite_exact.rat_q import Q
-from chromogeometry.chromatic import ChromoVec2, chromo_blue
+from chromogeometry.chromatic import ChromoVec2, chromo_blue, chromo_blue_b
 from swarm_models.linear_alignment import alignment_step
 
 
@@ -34,15 +34,13 @@ struct RationalVarianceWitness(Movable):
         self.nonincrease_certified = False
 
 
-def _difference_blue(imm a: ChromoVec2[QField], imm b: ChromoVec2[QField]) -> Q:
-    var ax = a.x.copy()
-    var ay = a.y.copy()
-    var bx = b.x.copy()
-    var by = b.y.copy()
-    var dx = QField.sub(ax,bx)
-    var dy = QField.sub(ay,by)
-    var difference = ChromoVec2[QField](dx,dy)
-    return chromo_blue(difference)
+def _difference_blue(a: ChromoVec2[QField], b: ChromoVec2[QField]) -> Q:
+    # Polarization computes Q(a-b) without manually consuming the
+    # non-implicitly-copyable BigZ/Q coordinates of a and b.
+    var qa = chromo_blue(a.copy())
+    var qb = chromo_blue(b.copy())
+    var cross = chromo_blue_b(a.copy(),b.copy())
+    return QField.sub(QField.add(qa,qb),QField.mul(Q.from_int(2),cross))
 
 
 def _sum_variance(values: List[ChromoVec2[QField]]) -> Q:
