@@ -96,4 +96,77 @@ theorem averageVec_energy_nonincrease (a : ℚ) (v w : ℚ × ℚ)
     positivity
   nlinarith
 end RationalConsensus
+
+/-! ### Guarded rational trigonometry over exact fields -/
+section GuardedGeometry
+variable {K : Type*} [Field K]
+
+theorem blue_spread_guard (x y u v : K)
+    (h : blue x y * blue u v ≠ 0) :
+    (1:K) - (x*u+y*v)^2/(blue x y * blue u v) =
+      (wedge x y u v)^2/(blue x y * blue u v) := by
+  calc
+    (1:K) - (x*u+y*v)^2/(blue x y * blue u v)
+        = (blue x y * blue u v - (x*u+y*v)^2)/(blue x y * blue u v) := by
+          rw [sub_div, div_self h]
+    _ = (wedge x y u v)^2/(blue x y * blue u v) := by
+      rw [blue_gram]
+
+theorem red_spread_guard (x y u v : K)
+    (h : red x y * red u v ≠ 0) :
+    (1:K) - (x*u-y*v)^2/(red x y * red u v) =
+      -(wedge x y u v)^2/(red x y * red u v) := by
+  calc
+    (1:K) - (x*u-y*v)^2/(red x y * red u v)
+        = (red x y * red u v - (x*u-y*v)^2)/(red x y * red u v) := by
+          rw [sub_div, div_self h]
+    _ = -(wedge x y u v)^2/(red x y * red u v) := by
+      rw [red_gram]
+
+theorem green_spread_guard (x y u v : K)
+    (h : green x y * green u v ≠ 0) :
+    (1:K) - (x*v+y*u)^2/(green x y * green u v) =
+      -(wedge x y u v)^2/(green x y * green u v) := by
+  calc
+    (1:K) - (x*v+y*u)^2/(green x y * green u v)
+        = (green x y * green u v-(x*v+y*u)^2)/(green x y * green u v) := by
+          rw [sub_div, div_self h]
+    _ = -(wedge x y u v)^2/(green x y * green u v) := by
+      rw [green_gram]
+
+def cayleyC (t : K) : K := (1-t^2)/(1+t^2)
+def cayleyS (t : K) : K := (2*t)/(1+t^2)
+
+theorem cayley_unit (t : K) (h : (1:K)+t^2 ≠ 0) :
+    (cayleyC t)^2+(cayleyS t)^2=1 := by
+  dsimp [cayleyC, cayleyS]
+  field_simp [h]
+  ring
+end GuardedGeometry
+
+section ChromaticCovariance
+variable {R : Type*} [CommRing R]
+
+theorem red_rotation_covariant (c s x y : R) :
+    red (c*x-s*y) (s*x+c*y) =
+      (c^2-s^2)*red x y - (2*c*s)*green x y := by
+  dsimp [red,green]
+  ring
+
+theorem green_rotation_covariant (c s x y : R) :
+    green (c*x-s*y) (s*x+c*y) =
+      (2*c*s)*red x y + (c^2-s^2)*green x y := by
+  dsimp [red,green]
+  ring
+end ChromaticCovariance
+
+theorem rational_cayley_den_nonzero (t : ℚ) :
+    (1:ℚ)+t^2 ≠ 0 := by
+  have h : 0 < (1:ℚ)+t^2 := by positivity
+  exact ne_of_gt h
+
+theorem rational_cayley_unit (t : ℚ) :
+    (cayleyC t)^2+(cayleyS t)^2=1 :=
+  cayley_unit t (rational_cayley_den_nonzero t)
+
 end ChromoswarmGeneral
