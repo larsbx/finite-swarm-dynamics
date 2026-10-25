@@ -88,3 +88,7 @@ The field-generic linear alignment step is implemented in `kernel/swarm_models/l
 ## Exhaustive Mojo ↔ Python conformance
 
 The 343 scalar configurations in `F_7³` for the directed alignment chain are replayed through actual pinned Mojo code and independently through the Python oracle. CI compares every canonical row against a versioned finite-field dataset; see [conformance protocol](docs/ALIGNMENT_CONFORMANCE.md).
+
+## Exact rational N-agent variance certificates
+
+The rational domain now includes a finite algebraic Jensen/variance identity for arbitrary agent count N, with a separate nonnegative/column-unital guard for ordered weak Lyapunov descent. A signed doubly unital counterexample and a rational Markov transition kernel distinguish algebraic row sums from probability. The compiled Mojo witness uses the canonical upstream `QField`; see [RQV-1 variance specification](docs/RATIONAL_VARIANCE.md). The formal all-N Lean proof remains an explicitly open obligation.
