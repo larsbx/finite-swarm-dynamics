@@ -108,7 +108,7 @@ theorem blue_spread_guard (x y u v : K)
   calc
     (1:K) - (x*u+y*v)^2/(blue x y * blue u v)
         = (blue x y * blue u v - (x*u+y*v)^2)/(blue x y * blue u v) := by
-          field_simp [h]
+          rw [sub_div, div_self h]
     _ = (wedge x y u v)^2/(blue x y * blue u v) := by
       rw [blue_gram]
 
@@ -119,7 +119,7 @@ theorem red_spread_guard (x y u v : K)
   calc
     (1:K) - (x*u-y*v)^2/(red x y * red u v)
         = (red x y * red u v - (x*u-y*v)^2)/(red x y * red u v) := by
-          field_simp [h]
+          rw [sub_div, div_self h]
     _ = -(wedge x y u v)^2/(red x y * red u v) := by
       rw [red_gram]
 
@@ -130,7 +130,7 @@ theorem green_spread_guard (x y u v : K)
   calc
     (1:K) - (x*v+y*u)^2/(green x y * green u v)
         = (green x y * green u v-(x*v+y*u)^2)/(green x y * green u v) := by
-          field_simp [h]
+          rw [sub_div, div_self h]
     _ = -(wedge x y u v)^2/(green x y * green u v) := by
       rw [green_gram]
 
