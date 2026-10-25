@@ -20,7 +20,7 @@ Requires Python 3.11 or later; no third-party dependencies.
 
     python -m unittest discover -s . -v
 
-Nine test methods exercise exact finite-field identities exhaustively over declared small domains (typically F_3, F_5, F_7, F_11) and verify sample swarm invariants. CI executes the tests on Python 3.11, 3.12, and 3.13.
+Nine test methods exercise exact finite-field identities exhaustively over declared small domains (typically F_3, F_5, F_7, F_11) and verify sample swarm invariants. CI runs the full Python test suite once, on pinned Python 3.12. Lean and canonical Mojo have separate verification jobs.
 
 ### Main entrypoints
 
