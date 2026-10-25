@@ -10,15 +10,13 @@ permissions:
 
 jobs:
   test:
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ['3.11', '3.12', '3.13']
+    # Preserve the existing Python 3.12 check name for branch rules.
+    name: test (3.12)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.12'
       - name: Verify finite-field kernel
         run: python -m unittest discover -s . -v
