@@ -26,5 +26,5 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: ChromoswarmJensen
+          leanchecker-args: ChromoswarmPlanar
           use-mathlib-cache: true
