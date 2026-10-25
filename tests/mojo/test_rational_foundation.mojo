@@ -12,6 +12,8 @@ from chromogeometry.chromatic import (
     chromo_gram_identity, chromo_harmonic_spread, chromo_pythagoras,
 )
 from swarm_models.linear_alignment import alignment_step, flock_step
+from projective_limits.line import p1_affine, p1_infinity
+from projective_limits.rotor import circle_point
 
 
 def v(x: Q, y: Q) -> ChromoVec2[QField]:
@@ -105,7 +107,20 @@ def test_exact_rational_average_and_contraction() raises:
     assert_true(QField.eq(chromo_blue(growing),Q(8,1)))
 
 
+def test_exact_rational_rotors() raises:
+    # Existing authoritative canonical rational-rotor implementation.
+    var quarter = circle_point(p1_affine(Q(1,2)))
+    assert_true(quarter.accepted())
+    assert_true(QField.eq(quarter.x, Q(3,5)))
+    assert_true(QField.eq(quarter.y, Q(4,5)))
+    var half = circle_point(p1_infinity())
+    assert_true(half.accepted())
+    assert_true(QField.eq(half.x, Q(-1,1)))
+    assert_true(QField.eq(half.y, Q.zero()))
+
+
 def main() raises:
     test_rational_chromogeometry()
     test_exact_rational_average_and_contraction()
+    test_exact_rational_rotors()
     print("PASS: first-class Q field geometry, averaging, ordered decay and signed counterexample.")
