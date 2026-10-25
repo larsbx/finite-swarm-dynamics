@@ -85,3 +85,8 @@ jobs:
           pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
             mojo run -I .cache/finite-math-kernels/kernel -I kernel \
             tests/mojo/test_rational_foundation.mojo
+      - name: Verify exact rational N-agent variance certificates
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel -I kernel \
+            tests/mojo/test_rational_variance.mojo
