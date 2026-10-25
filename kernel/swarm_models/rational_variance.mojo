@@ -150,10 +150,10 @@ def rational_variance_witness(
     report.column_unital = column_unital
     report.nonnegative_weights = nonnegative
     report.mean_preserved = mean_preserved
-    report.moment_gap = moment_gap
-    report.pairwise_witness = witness
-    report.variance_before = old_variance
-    report.variance_after = new_variance
+    report.moment_gap = moment_gap.copy()
+    report.pairwise_witness = witness.copy()
+    report.variance_before = old_variance.copy()
+    report.variance_after = new_variance.copy()
     report.exact_identity = row_identity and global_identity
     report.nonincrease_certified = column_unital and nonnegative and (
         not witness.lt(Q.zero()) and new_variance.le(old_variance)
