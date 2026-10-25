@@ -40,10 +40,14 @@ theorem weighted_square_identity
       _ = _ := by
         simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
         rw [← Finset.mul_sum, ← Finset.mul_sum]
-  rw [← hm, ← hw] at hexpand
-  dsimp [weightedMean] at *
-  -- The finite weighted square identity follows after the sum is normalized.
-  nlinarith [hexpand]
+  have hcenter :
+      (∑ j ∈ s, w j * (v j - m) ^ 2) =
+        (∑ j ∈ s, w j * v j ^ 2) - m ^ 2 := by
+    rw [hexpand, hm, hw]
+    ring
+  change (∑ j ∈ s, w j * v j ^ 2) - m ^ 2 =
+    ∑ j ∈ s, w j * (v j - m) ^ 2
+  exact hcenter.symm
 
 /-- Finite rational Jensen inequality, with the *separate* positivity guard. -/
 theorem weighted_square_le
