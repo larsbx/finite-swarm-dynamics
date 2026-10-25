@@ -109,14 +109,14 @@ def test_exact_rational_average_and_contraction() raises:
 
 def test_exact_rational_rotors() raises:
     # Existing authoritative canonical rational-rotor implementation.
-    var quarter = circle_point(p1_affine(Q(1,2)))
-    assert_true(quarter.accepted())
-    assert_true(QField.eq(quarter.x, Q(3,5)))
-    assert_true(QField.eq(quarter.y, Q(4,5)))
-    var half = circle_point(p1_infinity())
-    assert_true(half.accepted())
-    assert_true(QField.eq(half.x, Q(-1,1)))
-    assert_true(QField.eq(half.y, Q.zero()))
+    var p = p1_affine(Q(1,2))
+    var quarter = circle_point(p)
+    assert_true(quarter.x.eq(Q(3,5)))
+    assert_true(quarter.y.eq(Q(4,5)))
+    var infinite = p1_infinity()
+    var half = circle_point(infinite)
+    assert_true(half.x.eq(Q(-1,1)))
+    assert_true(half.y.eq(Q.zero()))
 
 
 def main() raises:
