@@ -34,9 +34,13 @@ struct RationalVarianceWitness(Movable):
         self.nonincrease_certified = False
 
 
-def _difference_blue(a: ChromoVec2[QField], b: ChromoVec2[QField]) -> Q:
-    var dx = QField.sub(a.x.copy(),b.x.copy())
-    var dy = QField.sub(a.y.copy(),b.y.copy())
+def _difference_blue(imm a: ChromoVec2[QField], imm b: ChromoVec2[QField]) -> Q:
+    var ax = a.x.copy()
+    var ay = a.y.copy()
+    var bx = b.x.copy()
+    var by = b.y.copy()
+    var dx = QField.sub(ax,bx)
+    var dy = QField.sub(ay,by)
     var difference = ChromoVec2[QField](dx,dy)
     return chromo_blue(difference)
 
