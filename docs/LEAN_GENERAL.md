@@ -1,0 +1,13 @@
+# General exact field and rational Lean theorems
+
+This companion to the existing fast finite-field Lean library uses Mathlib 4 at **commit d13f23b723b8a846827a245b89c10fc7d3f11612**, paired with Lean v4.34.1 and a pinned transitive manifest.
+
+Its scope is mathematically general rather than enumerative:
+
+- Chromatic Pythagoras, blue/red/green Gram determinant identities, and mixed chromatic identity are formalized over **any commutative ring**. Spread division still requires nonzero denominators and characteristic distinct from 2 for polarization.
+- For **all rational** velocities and all rational coupling weights, symmetric two-agent averaging preserves the sum, scales differences by `1−2a`, and scales squared blue disagreement by `(1−2a)²`.
+- When `0 ≤ a ≤ 1`, it proves **weak one-step Lyapunov nonincrease** for scalar and planar rational velocities using exact ordered arithmetic.
+
+This establishes no infinite-time convergence, continuous-time ODE equivalence, all-N Jensen theorem, or program refinement between Lean and Mojo. Those remain separate proof obligations.
+
+CI uses the independent Lean kernel checker, rejects new axioms and proof holes, and retains the original small-field Lean lane unchanged.

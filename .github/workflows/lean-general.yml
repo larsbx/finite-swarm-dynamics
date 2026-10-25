@@ -1,0 +1,30 @@
+name: General algebraic Lean proofs
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  general-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - name: Disallow proof bypass
+        run: |
+          if grep -nE '^[[:space:]]*(sorry|admit|axiom)([[:space:]]|$)|native_decide' formal/general/ChromoswarmGeneral.lean; then
+            echo "Proof bypass found"; exit 1
+          fi
+      - uses: leanprover/lean-action@v1
+        env:
+          LEAN_NUM_THREADS: "1"
+        with:
+          lake-package-directory: formal/general
+          build: true
+          test: false
+          lint: false
+          leanchecker: true
+          leanchecker-args: ChromoswarmGeneral
+          use-mathlib-cache: true
