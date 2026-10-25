@@ -35,9 +35,10 @@ struct RationalVarianceWitness(Movable):
 
 
 def _difference_blue(a: ChromoVec2[QField], b: ChromoVec2[QField]) -> Q:
-    return chromo_blue(ChromoVec2[QField](
-        QField.sub(a.x,b.x), QField.sub(a.y,b.y)
-    ))
+    var dx = QField.sub(a.x.copy(),b.x.copy())
+    var dy = QField.sub(a.y.copy(),b.y.copy())
+    var difference = ChromoVec2[QField](dx,dy)
+    return chromo_blue(difference)
 
 
 def _sum_variance(values: List[ChromoVec2[QField]]) -> Q:
@@ -124,7 +125,6 @@ def rational_variance_witness(
         QField.sub(weighted_input,new_moment), witness)
     if not row_identity:
         return report^
-    var mean_preserved = True
     var sx = Q.zero()
     var sy = Q.zero()
     var nx = Q.zero()
@@ -134,7 +134,7 @@ def rational_variance_witness(
         sy = QField.add(sy,velocities[i].y)
         nx = QField.add(nx,next.velocities[i].x)
         ny = QField.add(ny,next.velocities[i].y)
-    mean_preserved = QField.eq(sx,nx) and QField.eq(sy,ny)
+    var mean_preserved = QField.eq(sx,nx) and QField.eq(sy,ny)
     var global_identity = not column_unital or (
         mean_preserved and QField.eq(moment_gap,witness)
         and QField.eq(variance_gap,witness)
