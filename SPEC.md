@@ -1,3 +1,5 @@
+> **Domain scope note (October 2026):** This original v0.1 specification defines the *finite-field specialization*, not the complete arithmetic foundation. First-class ℤ and ordered ℚ are specified in [docs/EXACT_ARITHMETIC_DOMAINS.md](docs/EXACT_ARITHMETIC_DOMAINS.md). Rational comparisons/inequalities, averaging, exact probabilities, and rational rotations are available without modular semantics. Historical finite model results remain scoped to their stated fields.
+
 # Chromoswarm kernel 0.1 — mathematical specification
 
 **Scope:** A research-grade planar prototype with exact arithmetic, not an equivalent reformulation of any continuous-time swarm model. The executable implementation works over F_p for odd primes p. The algebraic identities below are valid over fields of characteristic different from 2, subject to their guards.

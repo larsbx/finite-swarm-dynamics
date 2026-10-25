@@ -1,8 +1,14 @@
 # Finite Swarm Dynamics
 
-An algebraic research program for swarm dynamics over finite fields, with projective incidence, rational trigonometry and chromogeometry.
+An exact algebraic research program for swarm dynamics over **ℤ, ℚ, and finite fields**, using projective incidence, rational trigonometry, chromogeometry and explicitly typed dynamical models. **ℚ is a first-class ordered field**, not an approximation layer; finite fields retain their independent modular semantics.
 
-## Chromoswarm kernel 0.1
+## Foundational arithmetic domains (current architecture)
+
+The core domain stack is **ℤ → ℚ**, together with separately guarded finite-field specializations and reductions. ℤ supports integral structures/certificates, ℚ supports exact division, ordered thresholds, rational probabilities, geometry and consensus, and finite fields support modular invariants, orbit classification and exhaustive verification. These domains have different ordering, normalization, and convergence properties.
+
+See **[First-class ℤ/ℚ/finite-field architecture](docs/EXACT_ARITHMETIC_DOMAINS.md)**. The older finite-only sections below describe historical, still-supported implementation phases, **not** a restriction that excludes ℚ. Exact rational Python semantics are in `reference/rational_swarm.py`; CI also compiles rational tests against the canonical upstream Mojo `QField`.
+
+## Chromoswarm kernel 0.1 (historical finite-field implementation)
 
 This initial change establishes an executable reference kernel over **odd prime fields F_p**. It implements planar affine/projective incidence, blue/red/green quadratic forms, exact bilinear and determinant computations, guarded colored spreads and quadrea, algebraic blue rotations, and a synchronous oriented-heading swarm map with exact orbit detection.
 
