@@ -1,6 +1,6 @@
 name = "chromoswarm_general"
 version = "0.1.0"
-defaultTargets = ["ChromoswarmGeneral", "ChromoswarmJensen"]
+defaultTargets = ["ChromoswarmGeneral", "ChromoswarmJensen", "ChromoswarmPlanar"]
 
 [[require]]
 name = "mathlib"
@@ -12,3 +12,6 @@ name = "ChromoswarmGeneral"
 
 [[lean_lib]]
 name = "ChromoswarmJensen"
+
+[[lean_lib]]
+name = "ChromoswarmPlanar"
