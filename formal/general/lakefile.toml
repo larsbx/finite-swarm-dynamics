@@ -1,6 +1,6 @@
 name = "chromoswarm_general"
 version = "0.1.0"
-defaultTargets = ["ChromoswarmGeneral", "ChromoswarmJensen", "ChromoswarmPlanar", "ChromoswarmStrict", "ChromoswarmStrictVectors", "ChromoswarmContraction", "ChromoswarmContractionVectors"]
+defaultTargets = ["ChromoswarmGeneral", "ChromoswarmJensen", "ChromoswarmPlanar", "ChromoswarmStrict", "ChromoswarmStrictVectors", "ChromoswarmContraction", "ChromoswarmContractionVectors", "ChromoswarmRoutes", "ChromoswarmRouteVectors"]
 
 [[require]]
 name = "mathlib"
@@ -27,3 +27,9 @@ name = "ChromoswarmContraction"
 
 [[lean_lib]]
 name = "ChromoswarmContractionVectors"
+
+[[lean_lib]]
+name = "ChromoswarmRoutes"
+
+[[lean_lib]]
+name = "ChromoswarmRouteVectors"
