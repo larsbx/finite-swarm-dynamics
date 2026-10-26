@@ -116,7 +116,8 @@ theorem routed_pair_bound (s : Finset ι) (P : ι → ι → ℚ) (v : ι → �
   have hc := weighted_chain_bound (fun t => v (p t)) l η (2 * pairLoss s P v) hη
     (fun t ht => edge_loss_bound s P v η hp (p t) (p (t+1))
       (hmem t (by omega)) (hmem (t+1) (by omega)) (hedge t ht))
-  dsimp only at hc
+  change η * blueDistance (v (p 0)) (v (p l)) ≤
+    (l : ℚ)^2 * (2 * pairLoss s P v) at hc
   rw [hstart, hend] at hc
   have hcast : (l : ℚ) ≤ L := by exact_mod_cast hl
   have hl0 : (0 : ℚ) ≤ l := Nat.cast_nonneg _
