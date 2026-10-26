@@ -19,7 +19,8 @@ jobs:
         run: |
           python -m tools.strict_variance_vectors --check
           python -m tools.contraction_vectors --check
-          python -m unittest test_strict_variance test_rational_contraction -v
+          python -m tools.route_vectors --check
+          python -m unittest test_strict_variance test_rational_contraction test_rational_routes -v
       - name: Disallow proof bypass
         run: |
           if grep -nE '^[[:space:]]*(sorry|admit|axiom)([[:space:]]|$)|native_decide' formal/general/*.lean; then
@@ -34,5 +35,5 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: ChromoswarmContractionVectors
+          leanchecker-args: ChromoswarmRouteVectors
           use-mathlib-cache: true

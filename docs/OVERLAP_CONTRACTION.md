@@ -82,8 +82,8 @@ It introduces no real scalars, analytic limits or asymptotic assumptions.
 
 The last case shows that a zero minimum overlap does **not** imply absence of
 strict descent. This certificate is sufficient; failure to obtain a positive
-`η` is not a converse theorem. A connected-support/path-based rate would need
-a separate proof. The thirds example retains positive variance at the tested
+`η` is not a converse theorem. The follow-up [finite route theorem](ROUTED_CONTRACTION.md) now
+gives a conservative rate under an explicit positive-overlap routing certificate. The thirds example retains positive variance at the tested
 horizon, so its contraction estimate is not an exact finite-consensus result.
 
 The nine fixed vectors also cover a singleton, a rational consensus state and
