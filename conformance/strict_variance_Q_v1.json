@@ -1,0 +1,352 @@
+{
+  "schema": "strict_variance_Q_v1",
+  "cases": [
+    {
+      "id": "singleton",
+      "kind": "equality",
+      "matrix": [
+        [
+          "1"
+        ]
+      ],
+      "velocities": [
+        [
+          "3",
+          "-2"
+        ]
+      ],
+      "old_variance": "0",
+      "new_variance": "0",
+      "pair_loss": "0",
+      "row_unital": true,
+      "column_unital": true,
+      "nonnegative": true,
+      "mixes_distinct": false
+    },
+    {
+      "id": "permutation",
+      "kind": "equality",
+      "matrix": [
+        [
+          "0",
+          "1"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "velocities": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "2",
+          "1"
+        ]
+      ],
+      "old_variance": "5/2",
+      "new_variance": "5/2",
+      "pair_loss": "0",
+      "row_unital": true,
+      "column_unital": true,
+      "nonnegative": true,
+      "mixes_distinct": false
+    },
+    {
+      "id": "consensus",
+      "kind": "equality",
+      "matrix": [
+        [
+          "1/2",
+          "1/2"
+        ],
+        [
+          "1/2",
+          "1/2"
+        ]
+      ],
+      "velocities": [
+        [
+          "3",
+          "-2"
+        ],
+        [
+          "3",
+          "-2"
+        ]
+      ],
+      "old_variance": "0",
+      "new_variance": "0",
+      "pair_loss": "0",
+      "row_unital": true,
+      "column_unital": true,
+      "nonnegative": true,
+      "mixes_distinct": false
+    },
+    {
+      "id": "strict_y_only",
+      "kind": "strict",
+      "matrix": [
+        [
+          "1/2",
+          "1/2"
+        ],
+        [
+          "1/2",
+          "1/2"
+        ]
+      ],
+      "velocities": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "2"
+        ]
+      ],
+      "old_variance": "2",
+      "new_variance": "0",
+      "pair_loss": "2",
+      "row_unital": true,
+      "column_unital": true,
+      "nonnegative": true,
+      "mixes_distinct": true
+    },
+    {
+      "id": "strict_three",
+      "kind": "strict",
+      "matrix": [
+        [
+          "1/2",
+          "1/2",
+          "0"
+        ],
+        [
+          "0",
+          "1/2",
+          "1/2"
+        ],
+        [
+          "1/2",
+          "0",
+          "1/2"
+        ]
+      ],
+      "velocities": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "2",
+          "0"
+        ],
+        [
+          "0",
+          "2"
+        ]
+      ],
+      "old_variance": "16/3",
+      "new_variance": "4/3",
+      "pair_loss": "4",
+      "row_unital": true,
+      "column_unital": true,
+      "nonnegative": true,
+      "mixes_distinct": true
+    },
+    {
+      "id": "rational_state",
+      "kind": "strict",
+      "matrix": [
+        [
+          "2/3",
+          "1/3"
+        ],
+        [
+          "1/3",
+          "2/3"
+        ]
+      ],
+      "velocities": [
+        [
+          "1/3",
+          "-2/5"
+        ],
+        [
+          "-1/2",
+          "3/7"
+        ]
+      ],
+      "old_variance": "60901/88200",
+      "new_variance": "60901/793800",
+      "pair_loss": "60901/99225",
+      "row_unital": true,
+      "column_unital": true,
+      "nonnegative": true,
+      "mixes_distinct": true
+    },
+    {
+      "id": "block_equality",
+      "kind": "equality",
+      "matrix": [
+        [
+          "1/2",
+          "1/2",
+          "0",
+          "0"
+        ],
+        [
+          "1/2",
+          "1/2",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0",
+          "1/2",
+          "1/2"
+        ],
+        [
+          "0",
+          "0",
+          "1/2",
+          "1/2"
+        ]
+      ],
+      "velocities": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "0"
+        ],
+        [
+          "2",
+          "1"
+        ],
+        [
+          "2",
+          "1"
+        ]
+      ],
+      "old_variance": "5",
+      "new_variance": "5",
+      "pair_loss": "0",
+      "row_unital": true,
+      "column_unital": true,
+      "nonnegative": true,
+      "mixes_distinct": false
+    },
+    {
+      "id": "signed_growth",
+      "kind": "invalid_nonnegative",
+      "matrix": [
+        [
+          "-1/2",
+          "3/2"
+        ],
+        [
+          "3/2",
+          "-1/2"
+        ]
+      ],
+      "velocities": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "2",
+          "0"
+        ]
+      ],
+      "old_variance": "2",
+      "new_variance": "8",
+      "pair_loss": "-6",
+      "row_unital": true,
+      "column_unital": true,
+      "nonnegative": false,
+      "mixes_distinct": false
+    },
+    {
+      "id": "missing_column",
+      "kind": "invalid_column",
+      "matrix": [
+        [
+          "1",
+          "0",
+          "0"
+        ],
+        [
+          "0",
+          "1",
+          "0"
+        ],
+        [
+          "0",
+          "3/4",
+          "1/4"
+        ]
+      ],
+      "velocities": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ],
+        [
+          "1/2",
+          "0"
+        ]
+      ],
+      "old_variance": "1/2",
+      "new_variance": "19/32",
+      "pair_loss": "3/64",
+      "row_unital": true,
+      "column_unital": false,
+      "nonnegative": true,
+      "mixes_distinct": true
+    },
+    {
+      "id": "missing_row",
+      "kind": "invalid_row_column",
+      "matrix": [
+        [
+          "2",
+          "0"
+        ],
+        [
+          "0",
+          "2"
+        ]
+      ],
+      "velocities": [
+        [
+          "0",
+          "0"
+        ],
+        [
+          "1",
+          "0"
+        ]
+      ],
+      "old_variance": "1/2",
+      "new_variance": "2",
+      "pair_loss": "0",
+      "row_unital": false,
+      "column_unital": false,
+      "nonnegative": true,
+      "mixes_distinct": false
+    }
+  ]
+}
