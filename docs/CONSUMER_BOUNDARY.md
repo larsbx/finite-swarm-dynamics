@@ -37,3 +37,16 @@ Do not silently copy named kernels into this repository and drift. For a future 
 5. Model PRs: separate finite Cucker–Smale/Vicsek/Kuramoto-style state maps and behavioral/non-equivalence certificates.
 
 No stage is marked complete on the basis of a document alone.
+
+## Research-only interface: parameterized training-route tensor directions
+
+The mathematical exploration and Python proof-of-concept for configurable vector/exterior-plane direction adapters live in [tensor-multiplication-research](https://github.com/larsbx/tensor-multiplication-research/blob/main/research/training-route-audit-experiment.md). This swarm repository remains a *possible downstream consumer*, not a second authoritative tensor algebra package and not an LLM training audit system.
+
+The upstream experiment replays both orderings `U_j(U_i(A))` and `U_i(U_j(A))` over **exact rationals** with explicit checks for four edge quadrances, both guarded directional spreads, a separate endpoint discrepancy, and rank/factor provenance. Results must distinguish:
+- `certified_exact`: both actual routes reach the same endpoint and all local guards pass.
+- `bounded_local_only`: the endpoint discrepancy is nonzero but within the declared bound; there is **no** exact 2-cell or global route-equivalence claim.
+- `rejected`: a spread, null guard, edge, endpoint policy, or factor-reconstruction check fails.
+
+Proposed swarm integration must define a typed `DirectionModel` (vector, rank-r subspace, or registered tensor adapter) and its field/guard requirements *without* changing existing swarm model meanings. For `Q`, exact ordered energy/spread comparisons can be modeled, but a finite field cannot use `<=` without a separate acceptance predicate. A rank-2 Gram determinant equal to zero is *undefined spread*, not zero spread. An oriented heading is not equivalent to a projective direction; antiparallel vectors have identical ray spread and must remain distinguishable wherever orientation matters.
+
+Proof obligations before a consumer implementation or higher-cell claim: complete state transitions (including optimizer-like auxiliary state when relevant), deterministic reexecution, global propagation bounds for approximately commutative steps, explicit 3-way coherence, and independently replayed conformance vectors against the pinned canonical Mojo kernels. The preliminary training-route experiment is not a new theorem of convergence, stochastic process equivalence, or continuous swarm dynamics.
