@@ -85,8 +85,9 @@ imported strictness, planar and Jensen dependencies. Existing finite Lean and
 pinned canonical Mojo acceptance lanes remain active.
 
 Weak descent, state-dependent strict descent, uniform contraction and eventual
-consensus are separate statements. This work establishes the first two and
-the equality case. It supplies no uniform rational decay factor over all
-states or time-varying matrices, and no eventual-consensus, real-limit,
-asymptotic or classical flocking convergence theorem. It also does not claim
-program refinement between the Lean model and the Mojo implementation.
+consensus are separate statements. This module establishes the first two and
+the equality case. The follow-up [overlap contraction theorem](OVERLAP_CONTRACTION.md)
+now supplies a sufficient uniform rational rate and finite-horizon bound under
+an additional explicit pair-overlap hypothesis. Neither module establishes
+eventual consensus, real limits, asymptotic or classical flocking convergence,
+or program refinement between the Lean model and the Mojo implementation.

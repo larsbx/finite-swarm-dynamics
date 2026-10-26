@@ -15,10 +15,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Independent exact rational strictness vectors
+      - name: Independent exact rational variance certificates
         run: |
           python -m tools.strict_variance_vectors --check
-          python -m unittest test_strict_variance -v
+          python -m tools.contraction_vectors --check
+          python -m unittest test_strict_variance test_rational_contraction -v
       - name: Disallow proof bypass
         run: |
           if grep -nE '^[[:space:]]*(sorry|admit|axiom)([[:space:]]|$)|native_decide' formal/general/*.lean; then
@@ -33,5 +34,5 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: ChromoswarmStrictVectors
+          leanchecker-args: ChromoswarmContractionVectors
           use-mathlib-cache: true
