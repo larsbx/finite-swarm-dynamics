@@ -12,6 +12,13 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Independent exact rational strictness vectors
+        run: |
+          python -m tools.strict_variance_vectors --check
+          python -m unittest test_strict_variance -v
       - name: Disallow proof bypass
         run: |
           if grep -nE '^[[:space:]]*(sorry|admit|axiom)([[:space:]]|$)|native_decide' formal/general/*.lean; then
@@ -26,5 +33,5 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: ChromoswarmPlanar
+          leanchecker-args: ChromoswarmStrictVectors
           use-mathlib-cache: true
