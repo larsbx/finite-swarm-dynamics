@@ -90,3 +90,8 @@ jobs:
           pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
             mojo run -I .cache/finite-math-kernels/kernel -I kernel \
             tests/mojo/test_rational_variance.mojo
+      - name: Verify finite-field leader homology image certificates
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel -I kernel \
+            tests/mojo/test_leader_coverage.mojo
