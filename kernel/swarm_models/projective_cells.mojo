@@ -81,17 +81,18 @@ def check_quad_cell[K: ExactField](
     var second = chromo_blue_spread(ac, bd)
     if not K.accepted(first) or not K.accepted(second):
         return out^
-    out.first = first
-    out.second = second
-    out.ok = True
     var complete = True
     for exists in boundary_edges:
         if not exists:
             complete = False
-    out.attaches = (
+    var selected = (
         complete and _member(first, permitted_spreads)
         and _member(second, permitted_spreads)
     )
+    out.first = first
+    out.second = second
+    out.ok = True
+    out.attaches = selected
     return out^
 
 
