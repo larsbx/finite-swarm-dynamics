@@ -95,3 +95,9 @@ jobs:
           pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
             mojo run -I .cache/finite-math-kernels/kernel -I kernel \
             tests/mojo/test_leader_coverage.mojo
+
+      - name: Verify projective swarm cells and exact cellular topology
+        run: |
+          pixi run --manifest-path .cache/finite-math-kernels/pixi.toml \
+            mojo run -I .cache/finite-math-kernels/kernel -I kernel \
+            tests/mojo/test_projective_cells.mojo
