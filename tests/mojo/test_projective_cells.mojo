@@ -3,7 +3,8 @@ from std.testing import assert_true, assert_false
 from finite_exact.fp import Fp, FpField
 from chromogeometry.chromatic import ChromoVec2
 from swarm_models.projective_cells import (
-    check_quad_cell, inspect_complex, cycle_circulation,\n    certify_quad_face, build_quad_complex, verify_cellular_stokes,
+    check_quad_cell, inspect_complex, cycle_circulation,
+    certify_quad_face, build_quad_complex, verify_cellular_stokes,
 )
 
 
