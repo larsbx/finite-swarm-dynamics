@@ -27,7 +27,7 @@ For the specified cross-ratio convention, the parameter is
 `rho=cr(0,∞;r,s)=r/s`. Swapping the absolute references interchanges
 `r,s` and changes `rho` to its inverse.
 
-The kernel-checked identity is
+For **distinct roots** `r≠s`, the module also derives both\nVieta relations directly from the two quadratic root equations\n`a+2br+cr²=0` and `a+2bs+cs²=0`. It then proves the\nregular CK identity without assuming Vieta separately. The repeated-root\nalgebraic extension uses explicit Vieta hypotheses instead.\n\nThe kernel-checked identity is
 
 ```
   (2 - (r/s + s/r))/4 = 1 - b²/(a*c).
