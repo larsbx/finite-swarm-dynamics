@@ -98,3 +98,7 @@ Finite positive-overlap routes now also give a conservative rational rate for co
 ## Exact leader placement / homology image certificates (LPC-1)
 
 [Leader placement specification](docs/LEADER_PLACEMENT.md) connects spread-certified 2-cells to basis-independent homology-class coverage by leader neighborhoods. The compiled finite-field verifier in `kernel/swarm_models/leader_coverage.mojo` checks whether a policy cycle has an unpinned homologous representative using the exact linear equation `z = J_S y + ∂₂b`; it emits a supported witness or a coverage certificate. CI exercises guarded F_7 and F_13 cases. This is not a claim about spectral damping, matroid rank, optimal placement, or changing the original homology of the swarm.
+
+## Guarded projective swarm-cell geometry (SGC-1)
+
+[SGC-1 geometry/topology specification](docs/PROJECTIVE_SWARM_GEOMETRY.md) adds a compiled Mojo consumer for guarded planar Cayley–Klein spread quadrilateral admission, exact finite-field cellular ranks/Betti numbers, and oriented cycle/cochain circulation. Tests were committed before the kernel and are independently replayed using a Python finite-field oracle. Pinned CI compiles F_7/F_13 geometric and homology cases and F_5 isotropic rejection. A cell certificate does not imply consensus, physical vorticity or stabilization.
