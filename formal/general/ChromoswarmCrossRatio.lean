@@ -79,6 +79,42 @@ theorem ordinary_cross_ratio_spread (a b c r s : K)
     (2 - (r/s + s/r))/4 = 1 - b^2/(a*c) :=
   cross_ratio_from_vieta a b c r s ha hc hr hs hfour hsum hprod
 
+
+/-- Vieta conditions follow from two *distinct* roots of
+a+2bt+ct². This is an exact field identity, not a claim about
+splitting over the base field. -/
+theorem vieta_from_distinct_quadratic_roots (a b c r s : K)
+    (hrs : r ≠ s)
+    (hrootr : a + 2*b*r + c*r^2 = 0)
+    (hroots : a + 2*b*s + c*s^2 = 0) :
+    c*(r+s) = -2*b ∧ c*(r*s) = a := by
+  have hfactor : (r-s)*(2*b+c*(r+s)) = 0 := by
+    calc
+      (r-s)*(2*b+c*(r+s)) =
+          (a+2*b*r+c*r^2)-(a+2*b*s+c*s^2) := by ring
+      _ = 0 := by rw [hrootr, hroots]; ring
+  have hcoef : 2*b+c*(r+s) = 0 :=
+    (mul_eq_zero.mp hfactor).resolve_left (sub_ne_zero.mpr hrs)
+  constructor
+  · linear_combination hcoef
+  · linear_combination -hrootr + r*hcoef
+
+/-- CK spread directly from two distinct quadratic absolute roots.
+This turns the Vieta interface into a derived theorem on the regular
+split locus (over whichever field contains both absolute roots). -/
+theorem regular_ck_from_quadratic_roots (a b c r s : K)
+    (ha : a ≠ 0) (hc : c ≠ 0)
+    (hr : r ≠ 0) (hs : s ≠ 0)
+    (hrs : r ≠ s) (hfour : (4 : K) ≠ 0)
+    (hrootr : a + 2*b*r + c*r^2 = 0)
+    (hroots : a + 2*b*s + c*s^2 = 0) :
+    (2 - (r/s+s/r))/4 = 1 - b^2/(a*c) := by
+  obtain ⟨hsum,hprod⟩ :=
+    vieta_from_distinct_quadratic_roots a b c r s hrs hrootr hroots
+  exact ordinary_cross_ratio_spread a b c r s
+    ha hc hr hs hrs hfour hsum hprod
+
+
 end Algebra
 
 end ChromoswarmCrossRatio
