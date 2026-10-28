@@ -73,7 +73,13 @@ def check_quad_cell[K: ExactField](
         return out^
     var ab = _difference(b, a)
     var ac = _difference(c, a)
-    if K.is_zero(chromo_det(ab, ac)):
+    if (
+        K.is_zero(chromo_det(ab, ac))
+        or K.is_zero(chromo_det(ab, _difference(d, a)))
+        or K.is_zero(chromo_det(ac, _difference(d, a)))
+        or K.is_zero(chromo_det(_difference(c, b), _difference(d, b)))
+    ):
+        # All four triples must be noncollinear, independent of cycle root.
         return out^
     var cd = _difference(d, c)
     var bd = _difference(d, b)
@@ -89,8 +95,8 @@ def check_quad_cell[K: ExactField](
         complete and _member(first, permitted_spreads)
         and _member(second, permitted_spreads)
     )
-    out.first = first
-    out.second = second
+    out.first = first^
+    out.second = second^
     out.ok = True
     out.attaches = selected
     return out^
@@ -109,7 +115,7 @@ def _valid_oriented_edges[K: ExactField](
         var nsource = 0
         var ntarget = 0
         for v in range(nv):
-            var coeff = d1[v][e]
+            var coeff = K.add(d1[v][e], K.zero())
             if not K.accepted(coeff):
                 return False
             if K.eq(coeff, K.neg(K.one())):
@@ -144,7 +150,7 @@ def _rank[K: ExactField](input: List[List[K.Element]], columns: Int) -> Int:
             for j in range(columns):
                 var saved = K.add(matrix[pivot][j], K.zero())
                 matrix[pivot][j] = K.add(matrix[found][j], K.zero())
-                matrix[found][j] = saved
+                matrix[found][j] = saved^
         var inv = K.div(K.one(), matrix[pivot][col])
         for j in range(col, columns):
             matrix[pivot][j] = K.mul(matrix[pivot][j], inv)
@@ -255,6 +261,6 @@ def cycle_circulation[K: ExactField](
     var total = K.zero()
     for e in range(ne):
         total = K.add(total, K.mul(cycle[e], edge_flow[e]))
-    out.value = total
+    out.value = total^
     out.ok = True
     return out^
