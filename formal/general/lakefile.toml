@@ -1,6 +1,6 @@
 name = "chromoswarm_general"
 version = "0.1.0"
-defaultTargets = ["ChromoswarmGeneral", "ChromoswarmJensen", "ChromoswarmPlanar", "ChromoswarmStrict", "ChromoswarmStrictVectors", "ChromoswarmContraction", "ChromoswarmContractionVectors", "ChromoswarmRoutes", "ChromoswarmRouteVectors", "ChromoswarmCells", "ChromoswarmCellVectors"]
+defaultTargets = ["ChromoswarmGeneral", "ChromoswarmJensen", "ChromoswarmPlanar", "ChromoswarmStrict", "ChromoswarmStrictVectors", "ChromoswarmContraction", "ChromoswarmContractionVectors", "ChromoswarmRoutes", "ChromoswarmRouteVectors", "ChromoswarmCells", "ChromoswarmCellVectors", "ChromoswarmAcceptance"]
 
 [[require]]
 name = "mathlib"
@@ -39,3 +39,6 @@ name = "ChromoswarmCells"
 
 [[lean_lib]]
 name = "ChromoswarmCellVectors"
+
+[[lean_lib]]
+name = "ChromoswarmAcceptance"
