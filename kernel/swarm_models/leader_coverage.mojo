@@ -64,7 +64,7 @@ def verify_leader_coverage[K: ExactField](
         for v in range(nv):
             if len(boundary1[v]) != ne:
                 return out^
-            var a = boundary1[v][e]
+            var a = K.add(boundary1[v][e], K.zero())
             if not K.accepted(a):
                 return out^
             if K.eq(a, K.neg(K.one())):
@@ -143,7 +143,7 @@ def verify_leader_coverage[K: ExactField](
             for j in range(nunknown + 1):
                 var tmp = K.add(matrix[found][j], K.zero())
                 matrix[found][j] = K.add(matrix[pivot_row][j], K.zero())
-                matrix[pivot_row][j] = tmp
+                matrix[pivot_row][j] = tmp^
         var inv = K.div(K.one(), matrix[pivot_row][col])
         for j in range(col, nunknown + 1):
             matrix[pivot_row][j] = K.mul(matrix[pivot_row][j], inv)
