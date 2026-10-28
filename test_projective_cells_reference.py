@@ -25,9 +25,12 @@ def spread(u, v, p):
 def quad(a, b, c, d, p):
     if len({a, b, c, d}) != 4:
         return None
+    vertices = (a, b, c, d)
+    for i, j, k in itertools.combinations(range(4), 3):
+        if det(diff(vertices[i], vertices[j], p),
+               diff(vertices[i], vertices[k], p), p) == 0:
+            return None
     ab, ac = diff(a, b, p), diff(a, c, p)
-    if det(ab, ac, p) == 0:
-        return None
     s1 = spread(ab, diff(c, d, p), p)
     s2 = spread(ac, diff(b, d, p), p)
     return (s1, s2) if s1 is not None and s2 is not None else None
@@ -108,6 +111,74 @@ class ProjectiveCellReferenceTests(unittest.TestCase):
         self.assertEqual(sum(x*y for x,y in zip(cycle,flow)) % p, 1)
         self.assertEqual(sum(x*y for x,y in zip(cycle,[0]*4)) % p, 0)
 
+
+
+
+def canonical_face_boundary(points, edges, q, p, allowed):
+    """Independent graph-to-cell construction; None means invalid/missing."""
+    if len(set(q)) != 4 or any(v < 0 or v >= len(points) for v in q):
+        return None
+    if quad(*(points[i] for i in q), p) is None:
+        return None
+    if not set(quad(*(points[i] for i in q), p)) <= set(allowed):
+        return None
+    ring = (q[0], q[1], q[3], q[2])
+    result = [0] * len(edges)
+    for i in range(4):
+        a, b = ring[i], ring[(i + 1) % 4]
+        if (a, b) in edges:
+            result[edges.index((a,b))] = 1
+        elif (b, a) in edges:
+            result[edges.index((b,a))] = -1
+        else:
+            return None
+    return tuple(result)
+
+
+class GeometryToTopologyAudit(unittest.TestCase):
+    def test_relabeling_and_bowtie_guard(self):
+        for p in (7, 13):
+            a,b,c,d=(0,0),(1,0),(0,1),(1,1)
+            root = quad(a,b,c,d,p)
+            self.assertEqual(root, (0,0))
+            self.assertEqual(quad(b,d,a,c,p), (0,0))
+            self.assertEqual(quad(a,c,b,d,p), (0,0))
+        a,b,c,d=(0,0),(1,0),(0,1),(2,0)
+        self.assertIsNone(quad(a,b,c,d,7))
+        self.assertIsNone(quad(b,d,a,c,7))
+
+    def test_disconnected_faces_and_stokes(self):
+        p=7
+        pts=((0,0),(1,0),(0,1),(1,1),
+             (3,0),(4,0),(3,1),(4,1))
+        edges=((0,1),(1,3),(3,2),(2,0),
+               (4,5),(5,7),(7,6),(6,4))
+        q0=(0,1,2,3)
+        q1=(4,5,6,7)
+        z0=canonical_face_boundary(pts,edges,q0,p,{0})
+        z1=canonical_face_boundary(pts,edges,q1,p,{0})
+        self.assertEqual(z0, (1,1,1,1,0,0,0,0))
+        self.assertEqual(z1, (0,0,0,0,1,1,1,1))
+        self.assertEqual(canonical_face_boundary(pts,edges,(1,3,0,2),p,{0}),z0)
+        self.assertEqual(canonical_face_boundary(pts,edges,(0,1,6,7),p,{0}),None)
+
+        d1=[[(-1 if v==a else 1 if v==b else 0) for a,b in edges]
+            for v in range(8)]
+        realized=[[z0[e],z1[e]] for e in range(8)]
+        self.assertEqual(betti(d1,realized,p),(2,0,0))
+        # Algebraic complex accepts disconnected sum as a single chain
+        # but there is no continuous S1 attaching loop spanning components.
+        unrealized=[[(z0[e]+z1[e]) % p] for e in range(8)]
+        self.assertEqual(betti(d1,unrealized,p),(2,1,0))
+        flow=[1]+[0]*7
+        face=[1,0]
+        coboundary=[sum(flow[e]*realized[e][f] for e in range(8))%p
+                    for f in range(2)]
+        boundary=[sum(realized[e][f]*face[f] for f in range(2))%p
+                  for e in range(8)]
+        self.assertEqual(sum(coboundary[f]*face[f] for f in range(2)) %p,
+                         sum(flow[e]*boundary[e] for e in range(8))%p)
+        self.assertEqual(sum(flow[e]*boundary[e] for e in range(8))%p,1)
 
 if __name__ == "__main__":
     unittest.main()
