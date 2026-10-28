@@ -40,7 +40,7 @@ edges `AB, BD, DC, CA`. Input order to the compiled kernel is
 
 Admissibility requires: odd-characteristic field, accepted scalars,
 exactly four edge flags, distinct vertices, noncollinear `A,B,C`,
-and nonisotropic vectors `AB, CD, AC, BD`. Failure returns
+no three collinear among `A,B,C,D` (to make the admission\nindependent of cyclic re-rooting), and nonisotropic vectors `AB, CD, AC, BD`. Failure returns
 `ok=false` and **never** attaches a cell. For an admissible
 candidate compute
 
@@ -79,7 +79,7 @@ beta2 = |F| - r2
 beta0 - beta1 + beta2 = |V| - |E| + |F|.
 ```
 
-These are Betti numbers **over the chosen coefficient field**, not
+**Crucial scope:** `inspect_complex` validates an **abstract chain complex**.\nThe equation `d1*d2=0` alone does not prove the columns of `d2` are\nattaching maps of geometric 2-cells. A single column equal to the sum\nof cycles in distinct connected graph components is a valid algebraic\ncycle, but cannot be the image of one connected attaching loop.\n\nThe geometric bridge is `certify_quad_face(positions,tails,heads,quad,S)`:\nit checks a simple graph, admissible planar coordinates, available\ncycle edges, and returns exactly the signed oriented chain\n`e_AB + e_BD + e_DC + e_CA` in the supplied edge basis, verifying\n`d1*d2=0`. `build_quad_complex` assembles these certificates\ninto oriented boundary matrices and deduplicates repeated or reversed\ncycle boundaries. The abstract analyzer remains available for legitimate\nnon-geometrically sourced chain complexes; do not call them\n**geometrically certified** without a provenance witness.\nThese are CW-style cellular attaching loops, **not** proofs of an\nembedded, non-self-intersecting polygon in the affine plane.\n\nThese are Betti numbers **over the chosen coefficient field**, not
 counts of flow vortices. With fixed graph, adding faces cannot
 increase `beta1` because `im d2` can only increase; it need not
 strictly decrease. Adding an independent second identical face to a
@@ -98,7 +98,7 @@ and evaluates the oriented cochain/chain pairing
 `sum_e cycle[e]*edge_flow[e]`.
 A filled boundary may have **nonzero** circulation when
 `d(edge_flow)!=0`, although its homology class is zero.
-Thus `beta1` alone cannot diagnose vorticity. Nonzero field values
+The compiled `verify_cellular_stokes(d1,d2,j,f)` validates the\nchain complex, exact cochain/chain dimensions and the finite-field identity\n`<d j,f> = <j,d2 f>`. A closed cochain has zero circulation on all\nface boundaries; an arbitrary flow need not be closed.\nThus `beta1` alone cannot diagnose vorticity. Nonzero field values
 have no intrinsic positive norm.
 
 Heading coincidence, projective alignment, formation-face admission,
@@ -113,7 +113,7 @@ was committed before the kernel. The tests cover F7/F13 exact square,
 skew cell and widened filter, missing edge, malformed dimension,
 coincident/collinear input, rejected scalar, unfilled/filled/double-filled
 homology, invalid boundary composition, stationary/nonzero circulation,
-noncycle rejection, and F5 isotropic guards.
+noncycle rejection, and F5 isotropic guards. The builder tests verified face boundary\ncolumns, duplicate/reverse elimination, disconnected components and\npositive/nonzero cochain coboundaries.
 
 The independent standard-library Python test
 `test_projective_cells_reference.py` exhaustively enumerates
@@ -122,7 +122,7 @@ calculates modular ranks/flow. It also checks the higher-dimensional
 tangent counterexample without asserting the Mojo plane kernel
 implements higher dimensions.
 
-**Unproved/unfinished obligations:** Lean general-field proof of the
+**Unproved/unfinished obligations:** proof that every accepted cell boundary\ncomes from the declared oriented attaching loop at the generic field\nlevel; proof that cyclic relabeling preserves the filtered decision;\nidentification of any actual planar embedding (not currently claimed); Lean general-field proof of the
 cross-ratio equivalence on the regular locus; Lean refinement of the
 compiled cell/rank kernels; persistence maps and representative tracking;
 orientation-lift dynamics; any invariant/descent theorem for an actual
