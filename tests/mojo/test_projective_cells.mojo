@@ -3,7 +3,7 @@ from std.testing import assert_true, assert_false
 from finite_exact.fp import Fp, FpField
 from chromogeometry.chromatic import ChromoVec2
 from swarm_models.projective_cells import (
-    check_quad_cell, inspect_complex, cycle_circulation,
+    check_quad_cell, inspect_complex, cycle_circulation,\n    certify_quad_face, build_quad_complex, verify_cellular_stokes,
 )
 
 
@@ -159,10 +159,213 @@ def test_isotropic_guard() raises:
     ).ok)
 
 
+
+
+def test_cycle_relabeling[p: Int64]() raises:
+    var a = vec[p](0, 0)
+    var b = vec[p](1, 0)
+    var c = vec[p](0, 1)
+    var d = vec[p](1, 1)
+    var z = allowed_zero[p]()
+    var edges = square_edges()
+    var root = check_quad_cell[FpField[p]](a, b, c, d, edges, z)
+    var rotate = check_quad_cell[FpField[p]](b, d, a, c, edges, z)
+    var reverse = check_quad_cell[FpField[p]](a, c, b, d, edges, z)
+    assert_true(root.ok and rotate.ok and reverse.ok)
+    assert_true(root.attaches and rotate.attaches and reverse.attaches)
+
+    # F7 regression: A,B,D are collinear, but A,B,C are not.
+    # Old root-dependent guard admitted the cycle while rotation rejected it.
+    var qd = vec[7](2, 0)
+    var all_spreads = List[Fp[7]]()
+    for x in range(7):
+        all_spreads.append(Fp[7](Int64(x)))
+    assert_false(check_quad_cell[FpField[7]](
+        vec[7](0, 0), vec[7](1, 0), vec[7](0, 1),
+        qd, square_edges(), all_spreads
+    ).ok)
+    assert_false(check_quad_cell[FpField[7]](
+        vec[7](1, 0), qd, vec[7](0, 0), vec[7](0, 1),
+        square_edges(), all_spreads
+    ).ok)
+
+
+def test_geometry_to_chain[p: Int64]() raises:
+    var points = List[ChromoVec2[FpField[p]]]()
+    points.append(vec[p](0, 0))
+    points.append(vec[p](1, 0))
+    points.append(vec[p](0, 1))
+    points.append(vec[p](1, 1))
+    var tails = List[Int]()
+    var heads = List[Int]()
+    tails.append(0)
+    heads.append(1)
+    tails.append(1)
+    heads.append(3)
+    tails.append(3)
+    heads.append(2)
+    tails.append(2)
+    heads.append(0)
+
+    var quad = List[Int]()
+    quad.append(0)
+    quad.append(1)
+    quad.append(2)
+    quad.append(3)
+    var rotated = List[Int]()
+    rotated.append(1)
+    rotated.append(3)
+    rotated.append(0)
+    rotated.append(2)
+
+    var decision = certify_quad_face[FpField[p]](
+        points, tails, heads, quad, allowed_zero[p]()
+    )
+    assert_true(decision.ok and decision.attaches)
+    assert_true(len(decision.boundary) == 4)
+    for e in range(4):
+        assert_true(decision.boundary[e] == Fp[p](1))
+
+    var candidates = List[List[Int]]()
+    candidates.append(quad^)
+    candidates.append(rotated^)
+    var built = build_quad_complex[FpField[p]](
+        points, tails, heads, candidates, allowed_zero[p]()
+    )
+    assert_true(built.ok)
+    # The second candidate is the same unrooted cycle, not a second face.
+    assert_true(len(built.accepted_candidates) == 1)
+    var summary = inspect_complex[FpField[p]](
+        built.boundary1, built.boundary2
+    )
+    assert_true(summary.ok)
+    assert_true(summary.beta0 == 1 and summary.beta1 == 0)
+    assert_true(summary.beta2 == 0)
+
+    var flow = List[Fp[p]]()
+    flow.append(Fp[p](1))
+    for _ in range(3):
+        flow.append(Fp[p](0))
+    var f = List[Fp[p]]()
+    f.append(Fp[p](1))
+    var stokes = verify_cellular_stokes[FpField[p]](
+        built.boundary1, built.boundary2, flow, f
+    )
+    assert_true(stokes.ok)
+    assert_true(stokes.face_evaluation == Fp[p](1))
+    assert_true(stokes.boundary_circulation == Fp[p](1))
+    var no_flow = List[Fp[p]]()
+    for _ in range(4):
+        no_flow.append(Fp[p](0))
+    var closed = verify_cellular_stokes[FpField[p]](
+        built.boundary1, built.boundary2, no_flow, f
+    )
+    assert_true(closed.ok and closed.face_evaluation == Fp[p](0))
+    var bad_f = List[Fp[p]]()
+    assert_false(verify_cellular_stokes[FpField[p]](
+        built.boundary1, built.boundary2, flow, bad_f
+    ).ok)
+
+    var duplicate_tails = List[Int]()
+    var duplicate_heads = List[Int]()
+    for e in range(4):
+        duplicate_tails.append(tails[e])
+        duplicate_heads.append(heads[e])
+    duplicate_tails.append(1)
+    duplicate_heads.append(0)
+    var invalid = build_quad_complex[FpField[p]](
+        points, duplicate_tails, duplicate_heads, candidates,
+        allowed_zero[p]()
+    )
+    assert_false(invalid.ok)
+
+
+def test_disconnected_chain_is_not_geometric_face() raises:
+    var points = List[ChromoVec2[FpField[7]]]()
+    points.append(vec[7](0, 0))
+    points.append(vec[7](1, 0))
+    points.append(vec[7](0, 1))
+    points.append(vec[7](1, 1))
+    points.append(vec[7](3, 0))
+    points.append(vec[7](4, 0))
+    points.append(vec[7](3, 1))
+    points.append(vec[7](4, 1))
+    var tails = List[Int]()
+    var heads = List[Int]()
+    var sources = List[Int]()
+    sources.append(0)
+    sources.append(1)
+    sources.append(3)
+    sources.append(2)
+    sources.append(4)
+    sources.append(5)
+    sources.append(7)
+    sources.append(6)
+    var destinations = List[Int]()
+    destinations.append(1)
+    destinations.append(3)
+    destinations.append(2)
+    destinations.append(0)
+    destinations.append(5)
+    destinations.append(7)
+    destinations.append(6)
+    destinations.append(4)
+    for e in range(8):
+        tails.append(sources[e])
+        heads.append(destinations[e])
+
+    var q0 = List[Int]()
+    q0.append(0)
+    q0.append(1)
+    q0.append(2)
+    q0.append(3)
+    var q1 = List[Int]()
+    q1.append(4)
+    q1.append(5)
+    q1.append(6)
+    q1.append(7)
+    var impossible = List[Int]()
+    impossible.append(0)
+    impossible.append(1)
+    impossible.append(6)
+    impossible.append(7)
+    var candidates = List[List[Int]]()
+    candidates.append(q0^)
+    candidates.append(q1^)
+    candidates.append(impossible^)
+    var built = build_quad_complex[FpField[7]](
+        points, tails, heads, candidates, allowed_zero[7]()
+    )
+    assert_true(built.ok)
+    assert_true(len(built.accepted_candidates) == 2)
+    var topology = inspect_complex[FpField[7]](
+        built.boundary1, built.boundary2
+    )
+    assert_true(topology.ok and topology.beta0 == 2)
+    assert_true(topology.beta1 == 0)
+
+    # Algebraically z0+z1 is a cycle, but it cannot be the attaching
+    # loop of a single geometric 2-cell across disconnected components.
+    var artificial = List[List[Fp[7]]]()
+    for _ in range(8):
+        var row = List[Fp[7]]()
+        row.append(Fp[7](1))
+        artificial.append(row^)
+    var algebra_only = inspect_complex[FpField[7]](
+        built.boundary1, artificial
+    )
+    assert_true(algebra_only.ok)
+    assert_true(algebra_only.beta0 == 2 and algebra_only.beta1 == 1)
+
 def main() raises:
     test_cells[7]()
     test_cells[13]()
     test_homology_and_circulation[7]()
     test_homology_and_circulation[13]()
     test_isotropic_guard()
+    test_cycle_relabeling[7]()
+    test_cycle_relabeling[13]()
+    test_geometry_to_chain[7]()
+    test_geometry_to_chain[13]()
+    test_disconnected_chain_is_not_geometric_face()
     print("SGC-1 compiled exact projective-cell and homology contracts passed.")
