@@ -264,3 +264,259 @@ def cycle_circulation[K: ExactField](
     out.value = total^
     out.ok = True
     return out^
+
+
+struct CertifiedQuadFace[K: ExactField](Movable):
+    var ok: Bool
+    var attaches: Bool
+    var boundary: List[Self.K.Element]
+
+    def __init__(out self):
+        self.ok = False
+        self.attaches = False
+        self.boundary = List[Self.K.Element]()
+
+
+def certify_quad_face[K: ExactField](
+    positions: List[ChromoVec2[K]],
+    tails: List[Int],
+    heads: List[Int],
+    quad: List[Int],
+    permitted_spreads: List[K.Element],
+) -> CertifiedQuadFace[K]:
+    """Construct a geometrically certified cellular face boundary.
+
+    `quad` lists vertex indices (A,B,C,D); the oriented attaching
+    edge-word is A->B->D->C->A. The graph must be simple, directed
+    orientations are merely basis conventions, and missing edges are
+    a *valid* nonattachment. Invalid graph/geometry fails closed.
+    """
+    var out = CertifiedQuadFace[K]()
+    var n = len(positions)
+    var ne = len(tails)
+    if n == 0 or ne == 0 or ne != len(heads) or len(quad) != 4:
+        return out^
+    for v in positions:
+        if not v.accepted():
+            return out^
+    for i in range(4):
+        if quad[i] < 0 or quad[i] >= n:
+            return out^
+        for j in range(i):
+            if quad[i] == quad[j]:
+                return out^
+    for e in range(ne):
+        if tails[e] < 0 or tails[e] >= n or heads[e] < 0 or heads[e] >= n:
+            return out^
+        if tails[e] == heads[e]:
+            return out^
+        for k in range(e):
+            if (
+                (tails[e] == tails[k] and heads[e] == heads[k])
+                or (tails[e] == heads[k] and heads[e] == tails[k])
+            ):
+                return out^
+
+    var ring = List[Int]()
+    ring.append(quad[0])
+    ring.append(quad[1])
+    ring.append(quad[3])
+    ring.append(quad[2])
+    var present = List[Bool]()
+    for k in range(4):
+        var found = False
+        var v = ring[k]
+        var w = ring[(k + 1) % 4]
+        for e in range(ne):
+            if (
+                (tails[e] == v and heads[e] == w)
+                or (tails[e] == w and heads[e] == v)
+            ):
+                found = True
+        present.append(found)
+    var geometry = check_quad_cell[K](
+        positions[quad[0]].copy(),
+        positions[quad[1]].copy(),
+        positions[quad[2]].copy(),
+        positions[quad[3]].copy(),
+        present,
+        permitted_spreads,
+    )
+    if not geometry.ok:
+        return out^
+    out.ok = True
+    if not geometry.attaches:
+        return out^
+
+    for _ in range(ne):
+        out.boundary.append(K.zero())
+    for k in range(4):
+        var v = ring[k]
+        var w = ring[(k + 1) % 4]
+        for e in range(ne):
+            if tails[e] == v and heads[e] == w:
+                out.boundary[e] = K.one()
+            elif tails[e] == w and heads[e] == v:
+                out.boundary[e] = K.neg(K.one())
+    # Geometric provenance and the chain law are both checked.
+    for vertex in range(n):
+        var sum_boundary = K.zero()
+        for e in range(ne):
+            if tails[e] == vertex:
+                sum_boundary = K.sub(sum_boundary, out.boundary[e])
+            if heads[e] == vertex:
+                sum_boundary = K.add(sum_boundary, out.boundary[e])
+        if not K.is_zero(sum_boundary):
+            out.ok = False
+            out.boundary.clear()
+            return out^
+    out.attaches = True
+    return out^
+
+
+struct CertifiedGeometryComplex[K: ExactField](Movable):
+    var ok: Bool
+    var accepted_candidates: List[Int]
+    var boundary1: List[List[Self.K.Element]]
+    var boundary2: List[List[Self.K.Element]]
+
+    def __init__(out self):
+        self.ok = False
+        self.accepted_candidates = List[Int]()
+        self.boundary1 = List[List[Self.K.Element]]()
+        self.boundary2 = List[List[Self.K.Element]]()
+
+
+def build_quad_complex[K: ExactField](
+    positions: List[ChromoVec2[K]],
+    tails: List[Int],
+    heads: List[Int],
+    candidates: List[List[Int]],
+    permitted_spreads: List[K.Element],
+) -> CertifiedGeometryComplex[K]:
+    """Build actual oriented boundary matrices from admitted quad faces.
+
+    Each unoriented 4-cycle appears at most once; repeated/reversed
+    attaching loops are deduplicated up to a global boundary sign.
+    No arbitrary algebraic d2 column is accepted as a geometric face.
+    """
+    var out = CertifiedGeometryComplex[K]()
+    var nv = len(positions)
+    var ne = len(tails)
+    if nv == 0 or ne == 0 or ne != len(heads):
+        return out^
+    for v in positions:
+        if not v.accepted():
+            return out^
+    for e in range(ne):
+        if tails[e] < 0 or heads[e] < 0 or tails[e] >= nv or heads[e] >= nv:
+            return out^
+        if tails[e] == heads[e]:
+            return out^
+        for k in range(e):
+            if (
+                (tails[e] == tails[k] and heads[e] == heads[k])
+                or (tails[e] == heads[k] and heads[e] == tails[k])
+            ):
+                return out^
+    for vertex in range(nv):
+        var row = List[K.Element]()
+        for e in range(ne):
+            if tails[e] == vertex:
+                row.append(K.neg(K.one()))
+            elif heads[e] == vertex:
+                row.append(K.one())
+            else:
+                row.append(K.zero())
+        out.boundary1.append(row^)
+    for _ in range(ne):
+        out.boundary2.append(List[K.Element]())
+
+    for index in range(len(candidates)):
+        var face = certify_quad_face[K](
+            positions, tails, heads, candidates[index], permitted_spreads
+        )
+        if not face.ok:
+            return out^
+        if not face.attaches:
+            continue
+        var duplicate = False
+        for f in range(len(out.accepted_candidates)):
+            var same = True
+            var reversed = True
+            for e in range(ne):
+                if not K.eq(out.boundary2[e][f], face.boundary[e]):
+                    same = False
+                if not K.eq(out.boundary2[e][f], K.neg(face.boundary[e])):
+                    reversed = False
+            if same or reversed:
+                duplicate = True
+        if duplicate:
+            continue
+        for e in range(ne):
+            out.boundary2[e].append(K.add(face.boundary[e], K.zero()))
+        out.accepted_candidates.append(index)
+
+    var validation = inspect_complex[K](out.boundary1, out.boundary2)
+    out.ok = validation.ok
+    return out^
+
+
+struct StokesCheck[K: ExactField](Movable):
+    var ok: Bool
+    var face_evaluation: Self.K.Element
+    var boundary_circulation: Self.K.Element
+
+    def __init__(out self):
+        self.ok = False
+        self.face_evaluation = Self.K.rejected()
+        self.boundary_circulation = Self.K.rejected()
+
+
+def verify_cellular_stokes[K: ExactField](
+    boundary1: List[List[K.Element]],
+    boundary2: List[List[K.Element]],
+    edge_flow: List[K.Element],
+    face_chain: List[K.Element],
+) -> StokesCheck[K]:
+    """Exact algebraic Stokes pairing <d j, f> = <j, d2 f>.
+
+    This identity says nothing about motion; a cochain can have
+    nonzero circulation around a filled face unless it is closed.
+    """
+    var out = StokesCheck[K]()
+    var structure = inspect_complex[K](boundary1, boundary2)
+    if not structure.ok or len(edge_flow) != len(boundary2):
+        return out^
+    var ne = len(boundary2)
+    var nf = len(boundary2[0])
+    if len(face_chain) != nf:
+        return out^
+    for e in range(ne):
+        if not K.accepted(edge_flow[e]):
+            return out^
+    for f in range(nf):
+        if not K.accepted(face_chain[f]):
+            return out^
+    var left = K.zero()
+    var right = K.zero()
+    for f in range(nf):
+        var coboundary = K.zero()
+        for e in range(ne):
+            coboundary = K.add(
+                coboundary, K.mul(edge_flow[e], boundary2[e][f])
+            )
+        left = K.add(left, K.mul(coboundary, face_chain[f]))
+    for e in range(ne):
+        var boundary_coefficient = K.zero()
+        for f in range(nf):
+            boundary_coefficient = K.add(
+                boundary_coefficient, K.mul(boundary2[e][f], face_chain[f])
+            )
+        right = K.add(right, K.mul(edge_flow[e], boundary_coefficient))
+    if not K.eq(left, right):
+        return out^
+    out.face_evaluation = left^
+    out.boundary_circulation = right^
+    out.ok = True
+    return out^
