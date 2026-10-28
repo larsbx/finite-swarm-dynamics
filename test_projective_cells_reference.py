@@ -147,6 +147,24 @@ class GeometryToTopologyAudit(unittest.TestCase):
         self.assertIsNone(quad(a,b,c,d,7))
         self.assertIsNone(quad(b,d,a,c,7))
 
+    def test_exhaustive_cyclic_and_reversal_invariance(self):
+        # Fixed affine origin is WLOG by translation invariance.
+        a=(0,0)
+        for p in (3,5):
+            points=list(itertools.product(range(p), repeat=2))
+            admitted=0
+            for b,c,d in itertools.product(points, repeat=3):
+                root=quad(a,b,c,d,p)
+                rotated=quad(b,d,a,c,p)
+                reverse=quad(a,c,b,d,p)
+                self.assertEqual(root is None, rotated is None)
+                self.assertEqual(root is None, reverse is None)
+                if root is not None:
+                    admitted+=1
+                    self.assertEqual(sorted(root), sorted(rotated))
+                    self.assertEqual(sorted(root), sorted(reverse))
+            self.assertGreater(admitted, 0)
+
     def test_disconnected_faces_and_stokes(self):
         p=7
         pts=((0,0),(1,0),(0,1),(1,1),
