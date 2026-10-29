@@ -64,7 +64,6 @@ theorem cross_ratio_from_vieta (a b c r s : K)
     _ = (a*c-b^2)/(a*c) := hmain
     _ = 1 - b^2/(a*c) := by
       field_simp [ha, hc]
-      ring
 
 /-- On the regular distinct-absolute-intersection locus the same
 ratio is the ordinary four-distinct-points Cayley–Klein expression.
