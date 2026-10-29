@@ -27,7 +27,13 @@ For the specified cross-ratio convention, the parameter is
 `rho=cr(0,∞;r,s)=r/s`. Swapping the absolute references interchanges
 `r,s` and changes `rho` to its inverse.
 
-For **distinct roots** `r≠s`, the module also derives both\nVieta relations directly from the two quadratic root equations\n`a+2br+cr²=0` and `a+2bs+cs²=0`. It then proves the\nregular CK identity without assuming Vieta separately. The repeated-root\nalgebraic extension uses explicit Vieta hypotheses instead.\n\nThe kernel-checked identity is
+For **distinct roots** `r≠s`, the module also derives both
+Vieta relations directly from the two quadratic root equations
+`a+2br+cr²=0` and `a+2bs+cs²=0`. It then proves the
+regular CK identity without assuming Vieta separately. The repeated-root
+algebraic extension uses explicit Vieta hypotheses instead.
+
+The kernel-checked identity is
 
 ```
   (2 - (r/s + s/r))/4 = 1 - b²/(a*c).
@@ -65,6 +71,9 @@ the right-hand side and is therefore in the base field.
   before the implementation.
 - `formal/general/ChromoswarmAcceptance.lean`: independent checker
   recursively imports earlier exact routing and swarm cell certificates.
+- `.github/workflows/lean-general.yml`: Lean build and independent
+  kernel checker plus transitive axiom-allowlist audit of the SGC-3 theorem
+  namespace (`propext`, `Classical.choice`, `Quot.sound` only).
 - `test_cross_ratio_arithmetic.py`: independent exhaustive
   nonzero/distinct split roots over F3,F5,F7,F11,F13, tangent
   algebraic evaluation, non-split F9 Galois exchange and invalid guards.
