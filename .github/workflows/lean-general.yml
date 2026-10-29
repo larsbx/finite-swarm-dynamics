@@ -35,5 +35,5 @@ jobs:
           test: false
           lint: false
           leanchecker: true
-          leanchecker-args: ChromoswarmRouteVectors
+          leanchecker-args: ChromoswarmAcceptance
           use-mathlib-cache: true

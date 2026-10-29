@@ -102,3 +102,7 @@ Finite positive-overlap routes now also give a conservative rational rate for co
 ## Guarded projective swarm-cell geometry (SGC-1)
 
 [SGC-1 geometry/topology specification](docs/PROJECTIVE_SWARM_GEOMETRY.md) adds a compiled Mojo consumer for guarded planar Cayley–Klein spread quadrilateral admission, exact finite-field cellular ranks/Betti numbers, and oriented cycle/cochain circulation. Tests were committed before the kernel and are independently replayed using a Python finite-field oracle. Pinned CI compiles F_7/F_13 geometric and homology cases and F_5 isotropic rejection. A cell certificate does not imply consensus, physical vorticity or stabilization.
+
+## General-field proof follow-up (SGC-2)
+
+[General planar cell and Stokes proof packet](docs/SGC2_PROOF_STATUS.md) adds Lean theorems for exact parallelogram completion from independent wedge directions, oriented four-walk closure, and the cellular Stokes chain–cochain identity over arbitrary commutative rings. The formal statements preserve the distinction between wedge numerators and guarded rational-trigonometric spreads, and do not claim universal program refinement or swarm stabilization.
