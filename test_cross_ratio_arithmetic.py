@@ -210,6 +210,50 @@ class CrossRatioArithmeticTests(unittest.TestCase):
         self.assertEqual(numerator, (1, 0))
         self.assertEqual(mul9(numerator, pow9((1, 0), 7)), (1, 0))
 
+    def test_projective_cross_ratio_change_of_frame(self):
+        # The intrinsic four-vertex determinant ratio is invariant under
+        # invertible homogeneous coordinate changes and rescalings.
+        # Independent of the blue quadratic form and its root equations.
+        from itertools import permutations, product
+
+        for p in (3, 5):
+            def det(u, v):
+                return (u[0]*v[1] - u[1]*v[0]) % p
+
+            def cross(a, b, c, d):
+                den = det(a, d)*det(b, c) % p
+                self.assertNotEqual(den, 0)
+                return det(a, c)*det(b, d)*inv(den, p) % p
+
+            def transport(m, u):
+                return ((m[0]*u[0]+m[1]*u[1]) % p,
+                        (m[2]*u[0]+m[3]*u[1]) % p)
+
+            vertices = [(1, t) for t in range(p)] + [(0, 1)]
+            ordered_frames = list(permutations(vertices, 4))
+            gl2 = [m for m in product(range(p), repeat=4)
+                   if (m[0]*m[3] - m[1]*m[2]) % p]
+
+            for m in gl2:
+                for a, b, c, d in ordered_frames:
+                    reference = cross(a, b, c, d)
+                    self.assertEqual(
+                        cross(transport(m, a), transport(m, b),
+                              transport(m, c), transport(m, d)), reference)
+                    # Scaling one representative by 2 must not alter CR.
+                    self.assertEqual(
+                        cross(tuple(2*x % p for x in a), b, c, d), reference)
+
+            # Fix [u] -> 0, [v] -> infinity and check the root-ratio
+            # convention against the homogeneous determinant definition.
+            for r in range(1, p):
+                for s in range(1, p):
+                    if r == s:
+                        continue
+                    self.assertEqual(
+                        cross((1, 0), (0, 1), (1, r), (1, s)),
+                        r*inv(s, p) % p)
+
     def test_nonzero_denominator_guard(self):
         for p in (3, 5, 7):
             with self.assertRaises(AssertionError):
