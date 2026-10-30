@@ -185,6 +185,57 @@ theorem blue_independent_roots_distinct (u v : K × K) (r s : K)
   exact (blue_independent_discriminant_ne_zero u v hdet) hdisc_zero
 
 
+/-- Alternating determinant of two homogeneous representatives
+on a projective line. This uses no choice of an affine chart. -/
+def det2 (u v : K × K) : K := u.1*v.2 - u.2*v.1
+
+/-- A common invertible change of homogeneous coordinates, written
+as a 2-by-2 matrix with explicit scalar entries. -/
+def linearFrame2 (m11 m12 m21 m22 : K) (u : K × K) : K × K :=
+  (m11*u.1 + m12*u.2, m21*u.1 + m22*u.2)
+
+/-- The determinant scales by the determinant of a frame change. -/
+theorem det2_frame (m11 m12 m21 m22 : K) (u v : K × K) :
+    det2 (linearFrame2 m11 m12 m21 m22 u)
+      (linearFrame2 m11 m12 m21 m22 v) =
+        (m11*m22 - m12*m21) * det2 u v := by
+  dsimp [det2, linearFrame2]
+  ring
+
+/-- The declared determinant convention for four ordered homogeneous
+vertices; a geometric interpretation requires nonzero denominators
+and pairwise distinct projective vertices. -/
+def cr2 (a b c d : K × K) : K :=
+  (det2 a c * det2 b d) / (det2 a d * det2 b c)
+
+/-- Intrinsic projective frame invariance, under the exact denominator
+guards and a nonzero determinant of the coordinate transformation. -/
+theorem cr2_frame_invariant (m11 m12 m21 m22 : K)
+    (a b c d : K × K)
+    (hm : m11*m22 - m12*m21 ≠ 0)
+    (had : det2 a d ≠ 0)
+    (hbc : det2 b c ≠ 0) :
+    cr2 (linearFrame2 m11 m12 m21 m22 a)
+      (linearFrame2 m11 m12 m21 m22 b)
+      (linearFrame2 m11 m12 m21 m22 c)
+      (linearFrame2 m11 m12 m21 m22 d) =
+        cr2 a b c d := by
+  simp only [cr2, det2_frame]
+  have ht : ((m11*m22-m12*m21)*det2 a d) *
+      ((m11*m22-m12*m21)*det2 b c) ≠ 0 :=
+    mul_ne_zero (mul_ne_zero hm had) (mul_ne_zero hm hbc)
+  have hb : det2 a d * det2 b c ≠ 0 := mul_ne_zero had hbc
+  apply (div_eq_div_iff ht hb).2
+  ring
+
+/-- The homogeneous cross-ratio agrees with the declared root-ratio
+coordinate (0,infinity;r,s) when s is nonzero. -/
+theorem cr2_absolute_coordinate (r s : K) (hs : s ≠ 0) :
+    cr2 (1, 0) (0, 1) (1, r) (1, s) = r/s := by
+  dsimp [cr2, det2]
+  field_simp [hs] <;> ring
+
+
 end Algebra
 
 end ChromoswarmCrossRatio
