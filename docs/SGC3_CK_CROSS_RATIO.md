@@ -47,6 +47,26 @@ Vieta relations directly from the two quadratic root equations
 regular CK identity without assuming Vieta separately. The repeated-root
 algebraic extension uses explicit Vieta hypotheses instead.
 
+### Direct blue-planar composition (new acceptance target)
+
+Composing Vieta with the Gram identity yields the explicit regular
+blue-plane expression (over any odd-characteristic field containing the
+absolute roots and satisfying the nonisotropic division guards):
+
+```
+  (2 - (r/s + s/r))/4
+    = (u_x*v_y - u_y*v_x)^2 / (Q(u)*Q(v)).
+```
+
+The additional Lean declarations `blue_planar_ck_from_vieta` and
+`blue_independent_roots_distinct` are new proof obligations on this branch,
+not independently accepted claims until the **exact-head hosted** Lean build,
+kernel checker and axiom audit pass. The distinct-root conclusion requires
+a nonzero wedge and characteristic different from two (via `4 ≠ 0`); it
+does **not** assert splitting in the base field. The direct equation remains
+about the fixed blue quadratic form and declared projective coordinate,
+rather than a universal geometric coordinate-independence theorem.
+
 The kernel-checked identity is
 
 ```
