@@ -67,4 +67,21 @@ example {K : Type*} [Field K] (u v : K × K) (r s : K)
       u.1^2 + u.2^2) : r ≠ s :=
   blue_independent_roots_distinct u v r s hdet hfour hsum hprod
 
+
+/-- Consumer check for the field-general homogeneous determinant theorem. -/
+example {K : Type*} [Field K] (m11 m12 m21 m22 : K)
+    (a b c d : K × K)
+    (hm : m11*m22 - m12*m21 ≠ 0)
+    (had : det2 a d ≠ 0) (hbc : det2 b c ≠ 0) :
+    cr2 (linearFrame2 m11 m12 m21 m22 a)
+      (linearFrame2 m11 m12 m21 m22 b)
+      (linearFrame2 m11 m12 m21 m22 c)
+      (linearFrame2 m11 m12 m21 m22 d) = cr2 a b c d :=
+  cr2_frame_invariant m11 m12 m21 m22 a b c d hm had hbc
+
+/-- The specific projective coordinate (0,infinity;r,s) matches r/s. -/
+example {K : Type*} [Field K] (r s : K) (hs : s ≠ 0) :
+    cr2 (1, 0) (0, 1) (1, r) (1, s) = r/s :=
+  cr2_absolute_coordinate r s hs
+
 end ChromoswarmCrossRatioVectors
