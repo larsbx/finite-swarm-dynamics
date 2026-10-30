@@ -131,6 +131,60 @@ theorem regular_ck_from_quadratic_roots (a b c r s : K)
     ha hc hr hs hrs hfour hsum hprod
 
 
+/-- The regular blue-plane CK ratio is the guarded squared wedge
+rather than an analytic angle. This composes the field-general Vieta
+identity with the planar Gram determinant. No root splitting is claimed. -/
+theorem blue_planar_ck_from_vieta (u v : K × K) (r s : K)
+    (hu : u.1^2 + u.2^2 ≠ 0) (hv : v.1^2 + v.2^2 ≠ 0)
+    (hr : r ≠ 0) (hs : s ≠ 0) (hfour : (4 : K) ≠ 0)
+    (hsum : (v.1^2 + v.2^2)*(r+s) =
+      -2*(u.1*v.1 + u.2*v.2))
+    (hprod : (v.1^2 + v.2^2)*(r*s) =
+      u.1^2 + u.2^2) :
+    (2 - (r/s + s/r))/4 =
+      (u.1*v.2 - u.2*v.1)^2 /
+        ((u.1^2 + u.2^2)*(v.1^2 + v.2^2)) := by
+  calc
+    (2 - (r/s + s/r))/4 =
+        1 - (u.1*v.1 + u.2*v.2)^2 /
+          ((u.1^2 + u.2^2)*(v.1^2 + v.2^2)) :=
+      cross_ratio_from_vieta
+        (u.1^2 + u.2^2) (u.1*v.1 + u.2*v.2)
+        (v.1^2 + v.2^2) r s
+        hu hv hr hs hfour hsum hprod
+    _ = (u.1*v.2 - u.2*v.1)^2 /
+          ((u.1^2 + u.2^2)*(v.1^2 + v.2^2)) := by
+      have hgram := blue_gram_determinant u v
+      field_simp [hu, hv] <;> linear_combination -hgram
+
+/-- Independent blue-plane directions cannot give a repeated
+absolute root in odd characteristic when the Vieta identities hold.
+The conclusion applies in any splitting field; it does not claim
+the absolute roots already lie in the original field. -/
+theorem blue_independent_roots_distinct (u v : K × K) (r s : K)
+    (hdet : u.1*v.2 - u.2*v.1 ≠ 0)
+    (hfour : (4 : K) ≠ 0)
+    (hsum : (v.1^2 + v.2^2)*(r+s) =
+      -2*(u.1*v.1 + u.2*v.2))
+    (hprod : (v.1^2 + v.2^2)*(r*s) =
+      u.1^2 + u.2^2) : r ≠ s := by
+  intro hrs
+  subst s
+  have hsumSq := congrArg (fun x : K => x^2) hsum
+  have hprodC := congrArg
+    (fun x : K => x * (v.1^2 + v.2^2)) hprod
+  have hzero :
+      (4 : K) *
+        ((u.1*v.1 + u.2*v.2)^2 -
+         (u.1^2 + u.2^2)*(v.1^2 + v.2^2)) = 0 := by
+    linear_combination -hsumSq + 4*hprodC
+  have hdisc_zero :
+      (u.1*v.1 + u.2*v.2)^2 -
+        (u.1^2 + u.2^2)*(v.1^2 + v.2^2) = 0 :=
+    (mul_eq_zero.mp hzero).resolve_left hfour
+  exact (blue_independent_discriminant_ne_zero u v hdet) hdisc_zero
+
+
 end Algebra
 
 end ChromoswarmCrossRatio
