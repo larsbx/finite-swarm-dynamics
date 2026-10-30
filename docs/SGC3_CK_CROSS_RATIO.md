@@ -8,7 +8,6 @@ PR #29's compiled Mojo geometry is already merged in `main`.
 Take a field `K` with `4 != 0` and a linearly independent pair of
 nonisotropic directions `u,v`. Their independence makes `[u+t v]` a
 projective coordinate, with `[u]↦0` and `[v]↦∞`. Write
-`[u+t v]` with `[u]↦0` and `[v]↦∞`. Write
 
 ```
   Q(u+t v) = a + 2*b*t + c*t²
