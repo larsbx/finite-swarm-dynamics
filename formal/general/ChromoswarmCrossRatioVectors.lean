@@ -42,4 +42,29 @@ example (u v : (ZMod 7) × (ZMod 7))
       (u.1^2 + u.2^2)*(v.1^2 + v.2^2) ≠ 0 :=
   blue_independent_discriminant_ne_zero u v hdet
 
+
+/-- Separate consumer of the combined planar wedge/rational CK theorem. -/
+example {K : Type*} [Field K] (u v : K × K) (r s : K)
+    (hu : u.1^2 + u.2^2 ≠ 0) (hv : v.1^2 + v.2^2 ≠ 0)
+    (hr : r ≠ 0) (hs : s ≠ 0) (hfour : (4 : K) ≠ 0)
+    (hsum : (v.1^2 + v.2^2)*(r+s) =
+      -2*(u.1*v.1 + u.2*v.2))
+    (hprod : (v.1^2 + v.2^2)*(r*s) =
+      u.1^2 + u.2^2) :
+    (2 - (r/s + s/r))/4 =
+      (u.1*v.2 - u.2*v.1)^2 /
+        ((u.1^2 + u.2^2)*(v.1^2 + v.2^2)) :=
+  blue_planar_ck_from_vieta u v r s
+    hu hv hr hs hfour hsum hprod
+
+/-- Regular blue-planar roots are distinct even after field extension. -/
+example {K : Type*} [Field K] (u v : K × K) (r s : K)
+    (hdet : u.1*v.2 - u.2*v.1 ≠ 0)
+    (hfour : (4 : K) ≠ 0)
+    (hsum : (v.1^2 + v.2^2)*(r+s) =
+      -2*(u.1*v.1 + u.2*v.2))
+    (hprod : (v.1^2 + v.2^2)*(r*s) =
+      u.1^2 + u.2^2) : r ≠ s :=
+  blue_independent_roots_distinct u v r s hdet hfour hsum hprod
+
 end ChromoswarmCrossRatioVectors
