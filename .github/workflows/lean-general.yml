@@ -36,4 +36,7 @@ jobs:
           lint: false
           leanchecker: true
           leanchecker-args: ChromoswarmAcceptance
+          axiom-audit: true
+          axiom-audit-root: ChromoswarmCrossRatio
+          axiom-audit-allow: propext,Classical.choice,Quot.sound
           use-mathlib-cache: true
