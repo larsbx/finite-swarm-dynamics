@@ -236,6 +236,38 @@ theorem cr2_absolute_coordinate (r s : K) (hs : s ≠ 0) :
   field_simp [hs] <;> ring
 
 
+/-- Replacing a homogeneous representative by a nonzero scalar
+multiple does not change the represented projective vertex. -/
+def scale2 (k : K) (u : K × K) : K × K :=
+  (k*u.1, k*u.2)
+
+/-- Each homogeneous determinant acquires one scalar for each
+representative that was rescaled. -/
+theorem det2_scale2 (k l : K) (u v : K × K) :
+    det2 (scale2 k u) (scale2 l v) =
+      (k*l)*det2 u v := by
+  dsimp [det2, scale2]
+  ring
+
+/-- Four independent nonzero homogeneous rescalings preserve the
+determinant-defined cross-ratio under its denominator guards. -/
+theorem cr2_rescale (a b c d : K × K) (ka kb kc kd : K)
+    (hka : ka ≠ 0) (hkb : kb ≠ 0)
+    (hkc : kc ≠ 0) (hkd : kd ≠ 0)
+    (had : det2 a d ≠ 0) (hbc : det2 b c ≠ 0) :
+    cr2 (scale2 ka a) (scale2 kb b)
+      (scale2 kc c) (scale2 kd d) = cr2 a b c d := by
+  simp only [cr2, det2_scale2]
+  have ht : ((ka*kd)*det2 a d) *
+      ((kb*kc)*det2 b c) ≠ 0 :=
+    mul_ne_zero
+      (mul_ne_zero (mul_ne_zero hka hkd) had)
+      (mul_ne_zero (mul_ne_zero hkb hkc) hbc)
+  have hb : det2 a d * det2 b c ≠ 0 := mul_ne_zero had hbc
+  apply (div_eq_div_iff ht hb).2
+  ring
+
+
 end Algebra
 
 end ChromoswarmCrossRatio
