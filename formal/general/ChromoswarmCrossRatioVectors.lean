@@ -84,4 +84,16 @@ example {K : Type*} [Field K] (r s : K) (hs : s ≠ 0) :
     cr2 (1, 0) (0, 1) (1, r) (1, s) = r/s :=
   cr2_absolute_coordinate r s hs
 
+
+/-- The cross-ratio is unchanged when the four homogeneous
+representatives are independently rescaled by nonzero scalars. -/
+example {K : Type*} [Field K] (a b c d : K × K)
+    (ka kb kc kd : K)
+    (hka : ka ≠ 0) (hkb : kb ≠ 0)
+    (hkc : kc ≠ 0) (hkd : kd ≠ 0)
+    (had : det2 a d ≠ 0) (hbc : det2 b c ≠ 0) :
+    cr2 (scale2 ka a) (scale2 kb b)
+      (scale2 kc c) (scale2 kd d) = cr2 a b c d :=
+  cr2_rescale a b c d ka kb kc kd hka hkb hkc hkd had hbc
+
 end ChromoswarmCrossRatioVectors
