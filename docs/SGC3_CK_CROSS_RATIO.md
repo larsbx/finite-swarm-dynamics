@@ -78,6 +78,34 @@ finite quadratic extensions. For a nonsplit quadratic over a base field,
 Galois conjugation exchanges the roots; the symmetric expression equals
 the right-hand side and is therefore in the base field.
 
+### Homogeneous four-vertex cross-ratio: independent field controls
+
+For homogeneous representatives `A,B,C,D` in a two-dimensional
+vector space, fix the determinant convention
+
+```text
+  cr(A,B;C,D) = det(A,C)*det(B,D)/(det(A,D)*det(B,C)).
+```
+
+The denominator must be nonzero. A common invertible change of frame
+`T ∈ GL₂(K)` multiplies **each** determinant by `det(T)`,
+so the two factors in numerator and denominator cancel. Rescaling
+any representative likewise cancels. For the chosen coordinate
+representatives `(1,0),(0,1),(1,r),(1,s)`, this formula yields
+`r/s` when `s ≠ 0`; the ordinary four-distinct-vertex locus also
+requires `r ≠ 0` and `r ≠ s`.
+
+The independent finite-field oracle exhaustively checks projective
+invariance for every invertible 2×2 matrix and every ordered quadruple
+of distinct projective vertices over F3 (1,152 transformed quadruples)
+and F5 (172,800). It also checks the declared root-ratio convention.
+This supplies a **finite control only**. A field-general Lean theorem
+connecting the intrinsic determinant cross-ratio to the root coordinate
+remains a distinct formalization obligation. In particular, invariance
+under `GL₂` refers to a *coordinate change* of the four projective
+vertices, not a claim that an arbitrary `GL₂` transformation preserves
+the fixed blue quadratic form.
+
 ### Critical distinctions
 
 - If `r != s`, this is the ordinary four-distinct-point CK
