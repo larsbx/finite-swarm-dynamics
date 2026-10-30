@@ -63,6 +63,38 @@ class CrossRatioArithmeticTests(unittest.TestCase):
                                 independent_nonisotropic += 1
             self.assertGreater(independent_nonisotropic, 0)
 
+    def test_blue_planar_cross_ratio_composition(self):
+        # Independent composition: exhaust ordered blue-plane vector pairs.
+        # Nonisotropic independent directions have two distinct roots over
+        # a splitting field; they need not split over the prime base field.
+        # In these primes, -1 is square exactly for p = 5 and 13.
+        split_counts = {3: 0, 5: 192, 7: 0, 11: 0, 13: 19008}
+        for p in (3, 5, 7, 11, 13):
+            tested = 0
+            for ux in range(p):
+                for uy in range(p):
+                    for vx in range(p):
+                        for vy in range(p):
+                            a = (ux*ux + uy*uy) % p
+                            b = (ux*vx + uy*vy) % p
+                            c = (vx*vx + vy*vy) % p
+                            wedge = (ux*vy - uy*vx) % p
+                            if not (a and c and wedge):
+                                continue
+                            roots = [t for t in range(p)
+                                     if (a + 2*b*t + c*t*t) % p == 0]
+                            self.assertIn(len(roots), (0, 2))
+                            if not roots:
+                                continue  # Nonsplit; no invented base-field roots.
+                            r, s = roots
+                            self.assertNotEqual(r, s)
+                            ck, bilinear_spread = expression(a, b, c, r, s, p)
+                            wedge_spread = wedge*wedge*inv(a*c, p) % p
+                            self.assertEqual(ck, wedge_spread)
+                            self.assertEqual(bilinear_spread, wedge_spread)
+                            tested += 1
+            self.assertEqual(tested, split_counts[p])
+
     def test_all_distinct_split_nonzero_roots(self):
         for p in (3, 5, 7, 11, 13):
             total = 0
