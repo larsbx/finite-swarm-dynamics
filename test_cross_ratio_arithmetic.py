@@ -126,6 +126,71 @@ class CrossRatioArithmeticTests(unittest.TestCase):
             # Roots repeat, so this is an algebraic evaluation of the
             # symmetric expression, not an ordinary distinct-point ratio.
 
+    def test_exhaustive_nonsplit_blue_quadratic_extensions(self):
+        # For p = 3 (mod 4), F_{p²}=F_p[z]/(z²+1) is a field.
+        # Reconstruct every nonsplit blue-plane absolute pair; no
+        # base-field root is fabricated and no analytic square root used.
+        expected = {3: 48, 7: 2016, 11: 13200}
+        for p, expected_pairs in expected.items():
+            def add(x, y):
+                return ((x[0]+y[0]) % p, (x[1]+y[1]) % p)
+
+            def mul(x, y):
+                return ((x[0]*y[0]-x[1]*y[1]) % p,
+                        (x[0]*y[1]+x[1]*y[0]) % p)
+
+            def power(x, n):
+                out = (1, 0)
+                while n:
+                    if n & 1:
+                        out = mul(out, x)
+                    x = mul(x, x)
+                    n >>= 1
+                return out
+
+            extension = [(a, b) for a in range(p) for b in range(p)]
+            roots_cache = {}
+            accepted = 0
+            for ux in range(p):
+                for uy in range(p):
+                    a = (ux*ux + uy*uy) % p
+                    if not a:
+                        continue
+                    for vx in range(p):
+                        for vy in range(p):
+                            c = (vx*vx + vy*vy) % p
+                            wedge = (ux*vy - uy*vx) % p
+                            if not c or not wedge:
+                                continue
+                            b = (ux*vx + uy*vy) % p
+                            key = (a, b, c)
+                            if key not in roots_cache:
+                                roots_cache[key] = [
+                                    t for t in extension
+                                    if add(add((a, 0), mul((2*b % p, 0), t)),
+                                           mul((c, 0), mul(t, t))) == (0, 0)
+                                ]
+                            roots = roots_cache[key]
+                            self.assertEqual(len(roots), 2)
+                            r, s = roots
+                            self.assertNotEqual(r, s)
+                            self.assertNotEqual(r, (0, 0))
+                            self.assertNotEqual(s, (0, 0))
+                            # Frobenius exchanges the nonsplit roots.
+                            self.assertEqual(power(r, p), s)
+                            self.assertEqual(power(s, p), r)
+                            rho = mul(r, power(s, p*p-2))
+                            self.assertEqual(power(rho, p), power(rho, p*p-2))
+                            self.assertEqual(power(rho, p+1), (1, 0))
+                            inverse_rho = power(rho, p*p-2)
+                            ck = mul(add((2, 0),
+                                         mul((-1 % p, 0), add(rho, inverse_rho))),
+                                     (inv(4, p), 0))
+                            expected_spread = wedge*wedge*inv(a*c, p) % p
+                            self.assertEqual(ck, (expected_spread, 0))
+                            accepted += 1
+            self.assertEqual(accepted, expected_pairs)
+
     def test_nonsplit_f9_galois_swap(self):
         # t²+1=0 has no root in F3, but splits at ±z in F9.
         z, minus_z = (0, 1), (0, 2)
