@@ -11,14 +11,18 @@ open ChromoswarmCrossRatio
 but root-ratio algebra remains defined. This is not an ordinary
 four-distinct-points cross-ratio. -/
 example :
-    (2 - (((6 : ZMod 7) / 6) + (6 / (6 : ZMod 7)))) / 4 =
-      1 - (1 : ZMod 7)^2 / (1 * 1) := by
+    ((2 : ZMod 7) -
+      (((6 : ZMod 7) / (6 : ZMod 7)) +
+       ((6 : ZMod 7) / (6 : ZMod 7)))) / (4 : ZMod 7) =
+      (1 : ZMod 7) - (1 : ZMod 7)^2 / ((1 : ZMod 7) * (1 : ZMod 7)) := by
   decide
 
 /-- Nondegenerate example with two distinct nonzero split roots. -/
 example :
-    (2 - (((1 : ZMod 7) / 2) + (2 / (1 : ZMod 7)))) / 4 =
-      1 - (2 : ZMod 7)^2 / (2 * 1) := by
+    ((2 : ZMod 7) -
+      (((1 : ZMod 7) / (2 : ZMod 7)) +
+       ((2 : ZMod 7) / (1 : ZMod 7)))) / (4 : ZMod 7) =
+      (1 : ZMod 7) - (2 : ZMod 7)^2 / ((2 : ZMod 7) * (1 : ZMod 7)) := by
   decide
 
 example (a b c r s : ℚ)
