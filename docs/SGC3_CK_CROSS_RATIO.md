@@ -106,6 +106,35 @@ under `GL₂` refers to a *coordinate change* of the four projective
 vertices, not a claim that an arbitrary `GL₂` transformation preserves
 the fixed blue quadratic form.
 
+### Formal homogeneous cross-ratio interface (new proof obligations)
+
+The branch now contains three *field-general Lean proof candidates* in
+`formal/general/ChromoswarmCrossRatio.lean`:
+
+- `det2_frame` shows determinants scale by the determinant of a
+  common linear coordinate transformation.
+- `cr2_frame_invariant` shows the determinant-defined cross-ratio is
+  unchanged by such a transformation with nonzero determinant,
+  provided the two denominator determinants are nonzero.
+- `cr2_rescale` proves that independent nonzero rescaling of each
+  of the four homogeneous representatives does not change the ratio.
+- `cr2_absolute_coordinate` identifies the convention
+  `cr2((1,0),(0,1),(1,r),(1,s)) = r/s` for `s ≠ 0`.
+
+Each lemma is consumed by a separate Lean example. These are
+**not kernel-accepted results until the latest exact-head hosted**
+Lean build, independent kernel checker and axiom audit pass.
+The proofs avoid choosing roots in the base field and do not invoke
+a square root. The transformation is interpreted as a *common
+coordinate-frame change*, not as an arbitrary isometry of the
+fixed blue form.
+
+An independent exact arithmetic replay checks 173,952 invertible
+frame/quadruple combinations over F3 and F5 and 92,544 additional
+homogeneous representative-rescaling combinations across those two
+fields, all without discrepancies. These finite controls do not
+replace the general-field Lean proof.
+
 ### Critical distinctions
 
 - If `r != s`, this is the ordinary four-distinct-point CK
