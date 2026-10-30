@@ -107,6 +107,10 @@ Finite positive-overlap routes now also give a conservative rational rate for co
 
 [General planar cell and Stokes proof packet](docs/SGC2_PROOF_STATUS.md) adds Lean theorems for exact parallelogram completion from independent wedge directions, oriented four-walk closure, and the cellular Stokes chain–cochain identity over arbitrary commutative rings. The formal statements preserve the distinction between wedge numerators and guarded rational-trigonometric spreads, and do not claim universal program refinement or swarm stabilization.
 
+## Mathematical literature for projective finite-field swarm geometry
+
+[Review of Cayley–Klein geometry, rational trigonometry, finite fields, and cellular algebra](docs/CAYLEY_KLEIN_FINITE_FIELD_LITERATURE_REVIEW.md) gives the classical and modern sources for the absolute/cross-ratio approach, its quadratic-form spread identity, Galois-descent and tangency distinctions, and the separate topology and dynamics literature. It is a literature survey, not a new theorem, proof acceptance record, or synchronization claim.
+
 ## Cayley–Klein projective root-ratio proof (SGC-3)
 
 [Exact cross-ratio/spread proof status](docs/SGC3_CK_CROSS_RATIO.md) states the odd-characteristic Vieta/root-ratio identity, with a strict distinction between an ordinary distinct-root cross-ratio and its algebraic tangent extension. Lean and independent bounded split/non-split finite-field examples are separate from geometric face construction and synchronization dynamics.
