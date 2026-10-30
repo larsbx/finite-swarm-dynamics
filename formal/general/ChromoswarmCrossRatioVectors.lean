@@ -31,4 +31,11 @@ example (a b c r s : ℚ)
     (2 - (r/s + s/r))/4 = 1 - b^2/(a*c) :=
   cross_ratio_from_vieta a b c r s ha hc hr hs (by norm_num) hadd hmul
 
+/-- A nonzero planar wedge forces a regular blue discriminant. -/
+example (u v : (ZMod 7) × (ZMod 7))
+    (hdet : u.1*v.2 - u.2*v.1 ≠ 0) :
+    (u.1*v.1 + u.2*v.2)^2 -
+      (u.1^2 + u.2^2)*(v.1^2 + v.2^2) ≠ 0 :=
+  blue_independent_discriminant_ne_zero u v hdet
+
 end ChromoswarmCrossRatioVectors

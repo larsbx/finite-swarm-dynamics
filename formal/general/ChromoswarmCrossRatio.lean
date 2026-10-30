@@ -19,6 +19,23 @@ namespace ChromoswarmCrossRatio
 section Algebra
 variable {K : Type*} [Field K]
 
+/-- The Gram discriminant of the blue quadratic plane is the
+negative square of the join/wedge determinant. -/
+theorem blue_gram_determinant (u v : K × K) :
+    (u.1*v.1 + u.2*v.2)^2 -
+      (u.1^2 + u.2^2)*(v.1^2 + v.2^2) =
+        -(u.1*v.2 - u.2*v.1)^2 := by
+  ring
+
+/-- Independent planar directions cannot be tangent to the blue absolute.
+This does not claim that the quadratic splits in the base field. -/
+theorem blue_independent_discriminant_ne_zero (u v : K × K)
+    (hdet : u.1*v.2 - u.2*v.1 ≠ 0) :
+    (u.1*v.1 + u.2*v.2)^2 -
+      (u.1^2 + u.2^2)*(v.1^2 + v.2^2) ≠ 0 := by
+  rw [blue_gram_determinant]
+  exact neg_ne_zero.mpr (pow_ne_zero 2 hdet)
+
 /-- Interchanging the two roots inverts their nonzero cross-ratio
 parameter. This is the symmetry that can arise from Galois exchange
 when the quadratic is nonsplit over the base field. -/

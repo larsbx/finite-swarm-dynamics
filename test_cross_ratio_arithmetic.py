@@ -43,6 +43,26 @@ def add9(x, y):
 
 
 class CrossRatioArithmeticTests(unittest.TestCase):
+    def test_blue_plane_gram_and_regular_locus(self):
+        # Independent exhaustive check in the canonical planar blue form.
+        for p in (3, 5, 7, 11, 13):
+            independent_nonisotropic = 0
+            for ux in range(p):
+                for uy in range(p):
+                    for vx in range(p):
+                        for vy in range(p):
+                            a = (ux*ux + uy*uy) % p
+                            b = (ux*vx + uy*vy) % p
+                            c = (vx*vx + vy*vy) % p
+                            wedge = (ux*vy - uy*vx) % p
+                            discriminant = (b*b - a*c) % p
+                            self.assertEqual(discriminant, (-wedge*wedge) % p)
+                            if wedge:
+                                self.assertNotEqual(discriminant, 0)
+                            if a and c and wedge:
+                                independent_nonisotropic += 1
+            self.assertGreater(independent_nonisotropic, 0)
+
     def test_all_distinct_split_nonzero_roots(self):
         for p in (3, 5, 7, 11, 13):
             total = 0
@@ -80,6 +100,9 @@ class CrossRatioArithmeticTests(unittest.TestCase):
         self.assertEqual(mul9(z, z), (2, 0))
         self.assertEqual(add9(z, minus_z), (0, 0))
         self.assertEqual(mul9(z, minus_z), (1, 0))
+        # The nontrivial F9/F3 Frobenius automorphism exchanges the roots.
+        self.assertEqual(pow9(z, 3), minus_z)
+        self.assertEqual(pow9(minus_z, 3), z)
         rho = mul9(z, pow9(minus_z, 7))
         inverse_rho = pow9(rho, 7)
         self.assertEqual(rho, (2, 0))

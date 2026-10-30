@@ -5,14 +5,29 @@ PR #29's compiled Mojo geometry is already merged in `main`.
 
 ## Precise domain
 
-Take a field `K` with `4 != 0` and an admissible pair of nonisotropic
-directions `u,v`. On their projective line, use the coordinate
+Take a field `K` with `4 != 0` and a linearly independent pair of
+nonisotropic directions `u,v`. Their independence makes `[u+t v]` a
+projective coordinate, with `[u]↦0` and `[v]↦∞`. Write
 `[u+t v]` with `[u]↦0` and `[v]↦∞`. Write
 
 ```
   Q(u+t v) = a + 2*b*t + c*t²
   a=Q(u), b=B(u,v), c=Q(v).
 ```
+
+For the planar blue quadratic `Q(x,y)=x²+y²`, the new general-field
+Gram certificate establishes
+
+```
+b² - a*c = -(u_x*v_y - u_y*v_x)².
+```
+
+Thus independent planar directions have nonzero discriminant: the two
+absolute intersections are distinct over a splitting field, although
+they need not lie in the base field. The repeated-root algebraic
+extension is relevant outside this independent planar-blue locus
+(e.g., other restricted quadratic configurations), not an additional
+admissible blue-plane four-point configuration.
 
 Both `a,c` must be nonzero. If the restricted quadratic has roots
 `r,s` in a splitting field `K'`, then Vieta yields
@@ -65,7 +80,7 @@ the right-hand side and is therefore in the base field.
 ## Proof/test artifacts
 
 - `formal/general/ChromoswarmCrossRatio.lean`: field-general
-  root exchange and spread formulas; `hfour` guards characteristic two.
+  blue-plane Gram discriminant, root exchange and spread formulas; `hfour` guards characteristic two.
 - `formal/general/ChromoswarmCrossRatioVectors.lean`: small
   modular controls and a rational specialization; test root committed
   before the implementation.
@@ -75,8 +90,8 @@ the right-hand side and is therefore in the base field.
   kernel checker plus transitive axiom-allowlist audit of the SGC-3 theorem
   namespace (`propext`, `Classical.choice`, `Quot.sound` only).
 - `test_cross_ratio_arithmetic.py`: independent exhaustive
-  nonzero/distinct split roots over F3,F5,F7,F11,F13, tangent
-  algebraic evaluation, non-split F9 Galois exchange and invalid guards.
+  nonzero/distinct split roots and planar Gram identity over F3,F5,F7,F11,F13,
+  tangent algebraic evaluation, non-split F9 Frobenius exchange and invalid guards.
 
 ### Scope of discharge
 
