@@ -7,6 +7,10 @@ Independent consumer root committed before the theorem module. -/
 namespace ChromoswarmCrossRatioVectors
 open ChromoswarmCrossRatio
 
+-- ZMod has a field instance only once primality of the modulus is supplied.
+-- Keep this as an explicit, kernel-checked finite-field input.
+local instance : Fact (Nat.Prime 7) := ⟨by decide⟩
+
 /-- In F7: Q(u+t v) = 1 + 2t + t² has a repeated root,
 but root-ratio algebra remains defined. This is not an ordinary
 four-distinct-points cross-ratio. -/
